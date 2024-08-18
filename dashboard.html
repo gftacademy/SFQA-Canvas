@@ -1,0 +1,123 @@
+<!-- dashboard.html -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center">
+        <i class="fas fa-tasks text-2xl text-blue-500 mr-3"></i>
+        <div>
+          <p class="text-lg font-semibold">Total Projects</p>
+          <p class="text-2xl font-bold">24</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center">
+        <i class="fas fa-check-circle text-2xl text-green-500 mr-3"></i>
+        <div>
+          <p class="text-lg font-semibold">Completed Projects</p>
+          <p class="text-2xl font-bold">18</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center">
+        <i class="fas fa-spinner text-2xl text-yellow-500 mr-3"></i>
+        <div>
+          <p class="text-lg font-semibold">Ongoing Projects</p>
+          <p class="text-2xl font-bold">5</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center">
+        <i class="fas fa-users text-2xl text-purple-500 mr-3"></i>
+        <div>
+          <p class="text-lg font-semibold">Team Members</p>
+          <p class="text-2xl font-bold">32</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white p-6 rounded shadow mb-6 overflow-x-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-semibold">Recent Projects</h3>
+      <a href="#" class="text-blue-500 hover:underline">View All</a>
+    </div>
+    <table class="w-full table-auto">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="p-3 text-left text-sm font-semibold">Project Name</th>
+          <th class="p-3 text-left text-sm font-semibold">Status</th>
+          <th class="p-3 text-left text-sm font-semibold">Progress</th>
+          <th class="p-3 text-left text-sm font-semibold">Deadline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b">
+          <td class="p-3 text-sm">Website Redesign</td>
+          <td class="p-3 text-sm"><span class="text-green-500 font-medium">Completed</span></td>
+          <td class="p-3 text-sm">
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+            </div>
+          </td>
+          <td class="p-3 text-sm">July 20, 2024</td>
+        </tr>
+        <tr class="border-b">
+          <td class="p-3 text-sm">Mobile App Development</td>
+          <td class="p-3 text-sm"><span class="text-yellow-500 font-medium">In Progress</span></td>
+          <td class="p-3 text-sm">
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+            </div>
+          </td>
+          <td class="p-3 text-sm">August 15, 2024</td>
+        </tr>
+        <tr class="border-b">
+          <td class="p-3 text-sm">Marketing Campaign</td>
+          <td class="p-3 text-sm"><span class="text-blue-500 font-medium">Planning</span></td>
+          <td class="p-3 text-sm">
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-500 h-2 rounded-full" style="width: 30%"></div>
+            </div>
+          </td>
+          <td class="p-3 text-sm">September 10, 2024</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="bg-white p-6 rounded shadow mb-6 overflow-x-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-semibold">Test Execution</h3>
+      <a href="#" class="text-blue-500 hover:underline">View All</a>
+    </div>
+    <table class="w-full table-auto">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="p-3 text-left text-sm font-semibold">Test Name</th>
+          <th class="p-3 text-left text-sm font-semibold">Status</th>
+          <th class="p-3 text-left text-sm font-semibold">Result</th>
+          <th class="p-3 text-left text-sm font-semibold">Execution Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b">
+          <td class="p-3 text-sm">Login Functionality Test</td>
+          <td class="p-3 text-sm"><span class="text-green-500 font-medium">Passed</span></td>
+          <td class="p-3 text-sm">All steps completed successfully</td>
+          <td class="p-3 text-sm">August 18, 2024, 10:30 AM</td>
+        </tr>
+        <tr class="border-b">
+          <td class="p-3 text-sm">Payment Gateway Integration Test</td>
+          <td class="p-3 text-sm"><span class="text-yellow-500 font-medium">In Progress</span></td>
+          <td class="p-3 text-sm">Executing payment scenarios</td>
+          <td class="p-3 text-sm">August 18, 2024, 11:00 AM</td>
+        </tr>
+        <tr class="border-b">
+          <td class="p-3 text-sm">UI Responsiveness Test</td>
+          <td class="p-3 text-sm"><span class="text-red-500 font-medium">Failed</span></td>
+          <td class="p-3 text-sm">Some UI elements not responsive</td>
+          <td class="p-3 text-sm">August 18, 2024, 11:30 AM</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

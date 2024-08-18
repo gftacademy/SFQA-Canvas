@@ -1,0 +1,60 @@
+<!-- proman.html -->
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold">Project Management</h1>
+    <a href="#" id="create-project-link" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create New Project</a>
+  </div>
+  
+  <!-- Projects List Section -->
+  <div class="bg-white p-6 rounded shadow mb-6 overflow-x-auto">
+    <h3 class="text-xl font-semibold mb-4">All Projects</h3>
+    <table class="w-full table-auto">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="p-3 text-left text-sm font-semibold">Project Name</th>
+          <th class="p-3 text-left text-sm font-semibold">Description</th>
+          <th class="p-3 text-left text-sm font-semibold">Milestones</th>
+          <th class="p-3 text-left text-sm font-semibold">Capabilities</th>
+          <th class="p-3 text-left text-sm font-semibold">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b">
+          <td class="p-3 text-sm">Website Redesign</td>
+          <td class="p-3 text-sm">Revamping the company website with a modern design.</td>
+          <td class="p-3 text-sm">
+            <ul class="list-disc list-inside">
+              <li>Design Phase</li>
+              <li>Development Phase</li>
+              <li>Testing Phase</li>
+            </ul>
+          </td>
+          <td class="p-3 text-sm">
+            <ul class="list-disc list-inside">
+              <li>Responsive Design</li>
+              <li>SEO Optimization</li>
+              <li>Performance Improvement</li>
+            </ul>
+          </td>
+          <td class="p-3 text-sm">
+            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Edit</button>
+            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-2">Delete</button>
+          </td>
+        </tr>
+        <!-- Add more projects here -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- JavaScript to handle the Create Project link -->
+  <script>
+    document.getElementById('create-project-link').addEventListener('click', function(event) {
+      event.preventDefault();
+      // Load the Create Project form dynamically
+      fetch('createproject.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('main-content').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading the form:', error));
+    });
+  </script>

@@ -1,0 +1,100 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Layout with Main Content</title>
+  <!-- Import Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Barlow', sans-serif;
+    }
+
+    /* Responsive Sidebar */
+    #sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    #sidebar.open {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 768px) {
+      #sidebar {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-60 bg-gray-900 text-white flex-shrink-0 absolute md:relative h-full">
+      <div class="p-4">
+        <h1 class="text-lg font-semibold mb-4">Project Management App</h1>
+        <ul class="space-y-2">
+          <li><a href="#" id="menu-dashboard" class="block py-2 px-4 hover:bg-gray-700">Dashboard</a></li>
+          <li><a href="#" id="menu-projects" class="block py-2 px-4 hover:bg-gray-700">Project Management</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-grow p-6 bg-gray-100" id="main-content">
+      <!-- Content will be dynamically loaded here -->
+      <h2 class="text-2xl font-semibold">Welcome to the Project Management App</h2>
+      <p class="text-sm text-gray-500">Select an option from the sidebar to get started.</p>
+    </div>
+  </div>
+
+  <!-- JavaScript for dynamic content loading -->
+  <script>
+    // Function to load external HTML content
+    function loadContent(url, callback) {
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById('main-content').innerHTML = data;
+          if (callback) callback(); // Execute callback after content is loaded
+        })
+        .catch(error => console.error('Error loading content:', error));
+    }
+
+    // Event listener for the Project Management menu
+    document.getElementById('menu-projects').addEventListener('click', function(event) {
+      event.preventDefault();
+      loadContent('proman.html', setupPromanScripts);
+    });
+
+    // Event listener for the Dashboard menu (example)
+    document.getElementById('menu-dashboard').addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById('main-content').innerHTML = `
+        <h2 class="text-2xl font-semibold">Dashboard</h2>
+        <p class="text-sm text-gray-500">This is the dashboard page content.</p>
+      `;
+    });
+
+    // Function to set up scripts for proman.html
+    function setupPromanScripts() {
+      document.getElementById('create-project-link').addEventListener('click', function(event) {
+        event.preventDefault();
+        loadContent('createproject.html');
+      });
+    }
+  </script>
+</body>
+
+</html>
