@@ -101,7 +101,7 @@
                 <i class="fas fa-tasks text-2xl text-blue-500 mr-3"></i>
                 <div>
                   <p class="text-lg font-semibold">Total Projects</p>
-                  <p class="text-2xl font-bold">24</p>
+                  <p class="text-2xl font-bold summary-total-projects">0</p>
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@
                 <i class="fas fa-check-circle text-2xl text-green-500 mr-3"></i>
                 <div>
                   <p class="text-lg font-semibold">Completed Projects</p>
-                  <p class="text-2xl font-bold">18</p>
+                  <p class="text-2xl font-bold summary-completed-projects">0</p>
                 </div>
               </div>
             </div>
@@ -119,7 +119,7 @@
                 <i class="fas fa-spinner text-2xl text-yellow-500 mr-3"></i>
                 <div>
                   <p class="text-lg font-semibold">Ongoing Projects</p>
-                  <p class="text-2xl font-bold">5</p>
+                  <p class="text-2xl font-bold summary-ongoing-projects">0</p>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@
                 <i class="fas fa-users text-2xl text-purple-500 mr-3"></i>
                 <div>
                   <p class="text-lg font-semibold">Team Members</p>
-                  <p class="text-2xl font-bold">32</p>
+                  <p class="text-2xl font-bold summary-team-members">32</p>
                 </div>
               </div>
             </div>
@@ -143,7 +143,10 @@
             <table class="w-full table-auto">
               <thead>
                 <tr class="bg-gray-200">
+                  <th class="p-3 text-left text-sm font-semibold">Id</th>
                   <th class="p-3 text-left text-sm font-semibold">Project Name</th>
+                  <th class="p-3 text-left text-sm font-semibold">Capabilties</th>
+                  <th class="p-3 text-left text-sm font-semibold">Milestones</th>
                   <th class="p-3 text-left text-sm font-semibold">Status</th>
                   <th class="p-3 text-left text-sm font-semibold">Progress</th>
                   <th class="p-3 text-left text-sm font-semibold">Deadline</th>
@@ -156,7 +159,7 @@
           </div>
         </div>
 
-
+        <!-- Project Management View -->
         <div id="project-list-view" class="space-y-6">
           <h2 class="text-xl font-semibold mb-3">Project List</h2>
           <ul id="project-list" class="space-y-4">
