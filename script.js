@@ -356,42 +356,36 @@ function openCreateProjectModal() {
       });
       
       function loadDashboardData(){
-        const recentProjects = [
-            {
-              name: 'Website Redesign',
-              status: 'Completed',
-              progress: 100,
-              deadline: 'July 20, 2024'
-            },
-            {
-              name: 'Mobile App Development',
-              status: 'In Progress',
-              progress: 70,
-              deadline: 'August 15, 2024'
-            },
-            {
-              name: 'Marketing Campaign',
-              status: 'Planning',
-              progress: 30,
-              deadline: 'September 10, 2024'
-            }
-          ];    
+        // Summary Data
+        const totalProjects = projects.length;
+        const completedProjects = projects.filter(project => project.status === 'Completed').length;
+        const ongoingProjects = projects.filter(project => project.status === 'In Progress').length;
+        const teamMembers = 32; // Example static value, you can replace this with dynamic data
+      
+        // Update Summary Cards
+        document.querySelector('.summary-total-projects').textContent = totalProjects;
+        document.querySelector('.summary-completed-projects').textContent = completedProjects;
+        document.querySelector('.summary-ongoing-projects').textContent = ongoingProjects;
+        document.querySelector('.summary-team-members').textContent = teamMembers;
     // Populate Recent Projects Table
       const recentProjectList = document.getElementById('recent-project-list');
       recentProjectList.innerHTML = '';
-      recentProjects.forEach(project =>{
+      projects.forEach(project =>{
         const row = document.createElement('tr');
       row.classList.add('border-b');
       row.innerHTML = `
-      <td class="p-2 text-sm">${project.name}</td>
-<td class="p-2 text-sm"><span class="text-${project.status === 'Completed' ? 'green' : project.status === 'In Progress' ? 'yellow' : 'blue'}-500 font-medium">${project.status}</span></td>
+        <td class="p-2 text-sm">${project.id}</td>
+        <td class="p-2 text-sm">${project.name}</td>
+        <td class="p-2 text-sm">${project.capabilities.length}</td>
+        <td class="p-2 text-sm">${project.milestones.length}</td>
+        <td class="p-2 text-sm"><span class="text-${project.status === 'Completed' ? 'green' : project.status === 'In Progress' ? 'yellow' : 'blue'}-500 font-medium">${project.status}</span></td>
           <td class="p-2 text-sm">
             <div class="w-full bg-gray-200 rounded-full h-2">
                 <div class="bg-${project.status === 'Completed' ? 'green' : project.status === 'In Progress' ? 'yellow' : 'blue'}-500 h-2 rounded-full" style="width: ${project.progress}%"></div>
               </div>
             </div>
           </td>
-          <td class="p-2 text-sm">${project.deadline}</td>
+          <td class="p-2 text-sm">${project.endDate}</td>
       `;
       recentProjectList.appendChild(row); 
       });
