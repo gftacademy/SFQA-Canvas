@@ -7,7 +7,6 @@ let projects = loadProjectsFromLocalStorage();
 function saveProjectsToLocalStorage() {
     localStorage.setItem('projects', JSON.stringify(projects));
   }
-  
   // Helper function to load projects from Local Storage
   function loadProjectsFromLocalStorage() {
     const storedProjects = localStorage.getItem('projects');
@@ -64,8 +63,8 @@ function saveProjectsToLocalStorage() {
     return Math.round((completedMilestones / milestones.length) * 100);
   }
   
-  // Load project list into the UI
-  function loadProjectList() {
+  // Load project list into the UI --->   Yg Lama
+  function loadProjectListOld() {
     const projectList = document.getElementById('project-list');
     projectList.innerHTML = ''; // Clear previous items
   
@@ -92,7 +91,6 @@ function saveProjectsToLocalStorage() {
         <button class="mt-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" onclick="viewProjectDetails('${project.id}')">View Details</button>
         <button class="mt-2 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" onclick="deleteProject('${project.id}')">Delete</button>
       `;
-  
       projectList.appendChild(listItem);
     });
   }
@@ -231,17 +229,62 @@ function saveProjectsToLocalStorage() {
           closeDeliverableModal();
         }
       });
-      
+          // Function to load and display the project list in the table
+  function loadProjectList() {
+    const tableBody = document.getElementById("project-list-tbody");
+    tableBody.innerHTML = ''; // Clear existing rows
+    projects.forEach(project => {
+      const row = document.createElement('tr');
+      row.classList.add('hover:bg-gray-100', 'transition-colors', 'border-b', 'border-gray-300');
+
+      row.innerHTML = `
+        <td class="py-3 px-4 flex items-center text-sm text-gray-800">
+          <i class="fas fa-folder-open text-blue-500 mr-3"></i> ${project.name}
+        </td>
+        <td class="py-3 px-4 text-sm">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClass(project.status)}">
+            <i class="fas fa-tasks mr-1"></i> ${project.status}
+          </span>
+        </td>
+        <td class="py-3 px-4 text-sm text-gray-600">
+          <ul class="list-disc pl-5">
+            ${project.capabilities.map(cap => `<li>${cap}</li>`).join('')}
+          </ul>
+        </td>
+        <td class="py-3 px-4 text-sm text-gray-600">${project.startDate}</td>
+        <td class="py-3 px-4 text-sm text-gray-600">${project.endDate}</td>
+        <td class="py-3 px-4 text-sm text-gray-600">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-blue-500 h-2 rounded-full" style="width: ${project.progress}%;"></div>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">${project.progress}% Complete</div>
+        </td>
+        <td class="py-3 px-4 text-center text-sm">
+          <button class="text-blue-600 hover:underline" onclick="viewProjectDetails('${project.id}')">
+            <i class="fas fa-eye"></i> View
+          </button>
+          <button class="text-green-600 hover:underline ml-3" onclick="editProject('${project.id}')">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="text-red-600 hover:underline ml-3" onclick="deleteProject('${project.id}')">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+      console.log(tableBody);
+    });
+  }
       // Event listeners for navigation
       document.getElementById('project-management-link').addEventListener('click', function () {
         document.getElementById('dashboard-view').classList.add('hidden');
         document.getElementById('project-list-view').classList.remove('hidden');
         document.getElementById('project-detail-view').classList.add('hidden');
         document.getElementById('test-execution-view').classList.add('hidden');
+        loadProjectList();
       });
       
       document.getElementById('milestone-management-link').addEventListener('click', openMilestoneModal);
-      
       document.getElementById('test-execution-link').addEventListener('click', function () {
         document.getElementById('project-list-view').classList.add('hidden');
         document.getElementById('project-detail-view').classList.add('hidden');
@@ -356,6 +399,7 @@ function openCreateProjectModal() {
       });
       
       function loadDashboardData(){
+        document.getElementById('dashboard-view').classList.remove('hidden');
         // Summary Data
         const totalProjects = projects.length;
         const completedProjects = projects.filter(project => project.status === 'Completed').length;
@@ -388,11 +432,42 @@ function openCreateProjectModal() {
           <td class="p-2 text-sm">${project.endDate}</td>
       `;
       recentProjectList.appendChild(row); 
-      });
-      
-       
+      });     
       }
 
+  
 
+  // Function to get the appropriate status class for the badge
+  function getStatusClass(status) {
+    switch (status) {
+      case 'In Progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'Completed':
+        return 'bg-green-100 text-green-800';
+      case 'Planning':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  }
+
+  // Placeholder functions for View, Edit, and Delete actions
+  function viewProject(id) {
+    alert(`Viewing details for project ID: ${id}`);
+    // Implement your logic here
+  }
+
+  function editProject(id) {
+    alert(`Editing project ID: ${id}`);
+    // Implement your logic here
+  }
+
+  function deleteProject(id) {
+    const confirmation = confirm(`Are you sure you want to delete project ID: ${id}?`);
+    if (confirmation) {
+      projects = projects.filter(project => project.id !== id);
+      loadProjectList(); // Reload the list after deletion
+    }
+  }
       // Load the project list on page load
-      loadProjectList();  
+      loadDashboardData(); 
