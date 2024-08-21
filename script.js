@@ -470,4 +470,27 @@ function openCreateProjectModal() {
     }
   }
       // Load the project list on page load
+// Update project dengan menambah progress default 0
+function updateLocalStorageStructure() {
+  // Ambil data dari local storage
+  let storedProjects = localStorage.getItem('projects');
+  if (storedProjects) {
+    // Parse data menjadi array objek JavaScript
+    let projects = JSON.parse(storedProjects);
+
+    // Iterasi setiap proyek dan tambahkan field baru
+    projects = projects.map(project => {
+      return {
+        ...project, // Mempertahankan field yang sudah ada
+        progress: project.progress || 0 // Menambahkan field 'progress' dengan default 0 jika belum ada
+      };
+    });
+
+    // Simpan kembali data yang sudah diperbarui ke local storage
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }
+}
+
+// Panggil fungsi ini saat halaman dimuat atau ketika ingin memperbarui struktur data
+updateLocalStorageStructure();
       loadDashboardData(); 
