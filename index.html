@@ -15,6 +15,14 @@
     body {
       font-family: 'Barlow', sans-serif;
     }
+        /* Custom scrollbar styles */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 
@@ -24,7 +32,26 @@
 
     <!-- Left Sidebar -->
     <div class="w-60 bg-gray-900 text-white flex-shrink-0">
-      <div class="p-4 text-lg font-semibold">SF-QA Canvas</div>
+        <!-- App Title and Subtitle -->
+        <div class="p-4 text-center border-b border-gray-700">
+          <div class="flex justify-center items-center space-x-3">
+            <!-- Ikon yang Menarik -->
+            <i class="fas fa-clipboard-check text-3xl text-blue-500"></i>
+            <div>
+              <h1 class="text-2xl font-bold text-white">SFactory-QA</h1>
+              <p class="text-sm text-gray-400">Quality Assurance Tool</p>
+            </div>
+          </div>
+        </div>
+
+  <!-- User Profile Section -->
+  <div class="p-4 flex items-center border-b border-gray-700">
+    <img src="https://api-portfolio.gft.academy/storage/images/fileAlbum_1724168123796.png" alt="User Pic" class="w-12 h-12 rounded-full mr-3">
+    <div>
+      <p class="text-lg font-medium">N. Santoso</p>
+      <p class="text-sm text-gray-400">Solution Architect</p>
+    </div>
+  </div>
       <ul class="mt-4 space-y-2">
         <!-- Level 1 Items -->
         <!-- Dashboard Menu -->
@@ -160,12 +187,37 @@
         </div>
 
         <!-- Project Management View -->
-        <div id="project-list-view" class="space-y-6">
-          <h2 class="text-xl font-semibold mb-3">Project List</h2>
+        <div id="project-list-view" class="space-y-4 hidden">
+          
           <ul id="project-list" class="space-y-4">
             <!-- Project Items will be dynamically added here -->
+            <div class="bg-gray-50 p-4 overflow-x-auto">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Project List</h3>
+                <a href="#" class="text-blue-500 hover:underline">View All</a>
+              </div>
+              <table class="min-w-full table-auto">
+                <thead>
+                  <tr class="bg-gray-200  text-sm font-semibold text-gray-600 border-b border-gray-300">
+                    <th class="py-3 px-4">Project Name</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4">Capabilities</th>
+                    <th class="py-3 px-4">Start Date</th>
+                    <th class="py-3 px-4">End Date</th>
+                    <th class="py-3 px-4">Progress</th>
+                    <th class="py-3 px-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="project-list-tbody">
+                  <!-- Example Row -->
+                  
+                  <!-- Repeat for more rows -->
+                </tbody>
+              </table>
+            </div>
           </ul>
         </div>
+
 
         <!-- Project Detail View (Hidden by Default) -->
         <div id="project-detail-view" class="space-y-4 hidden">
@@ -284,15 +336,6 @@
           <option value="On Hold">On Hold</option>
         </select>
       </div>
-      <!-- <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700">Start Date</label>
-        <input type="date" id="project-start-date" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
-      </div>
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700">End Date</label>
-        <input type="date" id="project-end-date" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
-      </div> -->
-
       <div class="mb-4 flex space-x-4">
         <div class="w-1/2">
           <label class="block text-sm font-medium text-gray-700">Start Date</label>
