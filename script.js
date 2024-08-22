@@ -63,37 +63,6 @@ function saveProjectsToLocalStorage() {
     return Math.round((completedMilestones / milestones.length) * 100);
   }
   
-  // Load project list into the UI --->   Yg Lama
-  function loadProjectListOld() {
-    const projectList = document.getElementById('project-list');
-    projectList.innerHTML = ''; // Clear previous items
-  
-    projects.forEach(project => {
-      const capabilityCount = Array.isArray(project.capabilities) ? project.capabilities.length : 0;
-      const milestoneCount = project.milestones.length;
-      const progress = calculateProgress(project.milestones);
-  
-      const listItem = document.createElement('li');
-      listItem.className = 'bg-white p-4 rounded-lg shadow-md';
-  
-      listItem.innerHTML = `
-        <h3 class="text-lg font-bold">${project.name} (ID: ${project.id})</h3>
-        <p class="text-sm text-gray-600">${project.description}</p>
-        <p class="mt-2 text-sm text-gray-600">Status: <strong>${project.status}</strong></p>
-        <p class="text-sm text-gray-600">Start Date: <strong>${project.startDate}</strong></p>
-        <p class="text-sm text-gray-600">End Date: <strong>${project.endDate}</strong></p>
-        <p class="text-sm text-gray-600">Capabilities: <strong>${capabilityCount}</strong></p>
-        <p class="text-sm text-gray-600">Milestones: <strong>${milestoneCount}</strong></p>
-        <p class="text-sm text-gray-600">Progress: <strong>${progress}%</strong></p>
-        <div class="w-full bg-gray-200 rounded-full h-2.5">
-          <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${progress}%;"></div>
-        </div>
-        <button class="mt-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" onclick="viewProjectDetails('${project.id}')">View Details</button>
-        <button class="mt-2 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" onclick="deleteProject('${project.id}')">Delete</button>
-      `;
-      projectList.appendChild(listItem);
-    });
-  }
   
   // View project details
   function viewProjectDetails(projectId) {
@@ -129,6 +98,8 @@ function saveProjectsToLocalStorage() {
         listItem.appendChild(loadDeliverables(milestone));
         milestoneList.appendChild(listItem);
       });
+    } else{
+      alert('project tidak ditemukan')
     }
   }
   
@@ -230,10 +201,24 @@ function saveProjectsToLocalStorage() {
         }
       });
           // Function to load and display the project list in the table
+          let currentPage = 1;
+          let itemsPerPage = 5;
+          document.getElementById('projectsPerPage').value=5; // Default projects per page    
+          // Fungsi untuk menghitung total halaman
+          function calculateTotalPages() {
+            return Math.ceil(projects.length / itemsPerPage);
+          }
+      
   function loadProjectList() {
     const tableBody = document.getElementById("project-list-tbody");
     tableBody.innerHTML = ''; // Clear existing rows
-    projects.forEach(project => {
+
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedProjects = projects.slice(startIndex, endIndex);
+
+    paginatedProjects.forEach(project => {
       const row = document.createElement('tr');
       row.classList.add('hover:bg-gray-100', 'transition-colors', 'border-b', 'border-gray-300');
 
@@ -272,9 +257,38 @@ function saveProjectsToLocalStorage() {
         </td>
       `;
       tableBody.appendChild(row);
-      console.log(tableBody);
     });
+    updatePaginationControls();
   }
+  // Fungsi untuk memperbarui kontrol pagination
+function updatePaginationControls() {
+  document.getElementById('currentPage').textContent = currentPage;
+  document.getElementById('totalPages').textContent = calculateTotalPages();
+  document.getElementById('prevPage').disabled = currentPage === 1;
+  document.getElementById('nextPage').disabled = currentPage === calculateTotalPages();
+}
+
+// Event listener untuk tombol sebelumnya
+document.getElementById('prevPage').addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    loadProjectList();
+  }
+});
+
+// Event listener untuk tombol berikutnya
+document.getElementById('nextPage').addEventListener('click', () => {
+  if (currentPage < calculateTotalPages()) {
+    currentPage++;
+    loadProjectList();
+  }
+});
+    // Event listener untuk dropdown items per page
+document.getElementById('projectsPerPage').addEventListener('change', (event) => {
+  itemsPerPage = parseInt(event.target.value);
+  currentPage = 1; // Reset ke halaman pertama saat jumlah per halaman diubah
+  loadProjectList();
+});
       // Event listeners for navigation
       document.getElementById('project-management-link').addEventListener('click', function () {
         document.getElementById('dashboard-view').classList.add('hidden');
@@ -376,7 +390,8 @@ function openCreateProjectModal() {
       startDate: document.getElementById('project-start-date').value,
       endDate: document.getElementById('project-end-date').value,
       capabilities: [...currentCapabilities],
-      milestones: [...currentMilestones]
+      milestones: [...currentMilestones],
+      progress : 0
     };
   
     projects.push(newProject);
@@ -470,27 +485,4 @@ function openCreateProjectModal() {
     }
   }
       // Load the project list on page load
-// Update project dengan menambah progress default 0
-function updateLocalStorageStructure() {
-  // Ambil data dari local storage
-  let storedProjects = localStorage.getItem('projects');
-  if (storedProjects) {
-    // Parse data menjadi array objek JavaScript
-    let projects = JSON.parse(storedProjects);
-
-    // Iterasi setiap proyek dan tambahkan field baru
-    projects = projects.map(project => {
-      return {
-        ...project, // Mempertahankan field yang sudah ada
-        progress: project.progress || 0 // Menambahkan field 'progress' dengan default 0 jika belum ada
-      };
-    });
-
-    // Simpan kembali data yang sudah diperbarui ke local storage
-    localStorage.setItem('projects', JSON.stringify(projects));
-  }
-}
-
-// Panggil fungsi ini saat halaman dimuat atau ketika ingin memperbarui struktur data
-updateLocalStorageStructure();
       loadDashboardData(); 
