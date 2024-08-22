@@ -109,7 +109,7 @@
 
       <!-- Top Navbar -->
       <div class="bg-white shadow p-3 flex justify-between items-center">
-        <div class="text-lg font-medium">SF-QA Canvas Dashboard</div>
+        <div class="text-lg font-medium">QA Dashboard</div>
         <div>
           <input type="text" placeholder="Search..." class="p-2 border rounded text-sm focus:outline-none">
           <a href="#" class="ml-3 text-gray-700 hover:text-gray-500">Profile</a>
@@ -189,36 +189,67 @@
         <!-- Project Management View -->
         <div id="project-list-view" class="space-y-4 hidden">
           
-          <ul id="project-list" class="space-y-4">
-            <!-- Project Items will be dynamically added here -->
-            <div class="bg-gray-50 p-4 overflow-x-auto">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold">Project List</h3>
-                <a href="#" class="text-blue-500 hover:underline">View All</a>
-              </div>
-              <table class="min-w-full table-auto">
-                <thead>
-                  <tr class="bg-gray-200  text-sm font-semibold text-gray-600 border-b border-gray-300">
-                    <th class="py-3 px-4">Project Name</th>
-                    <th class="py-3 px-4">Status</th>
-                    <th class="py-3 px-4">Capabilities</th>
-                    <th class="py-3 px-4">Start Date</th>
-                    <th class="py-3 px-4">End Date</th>
-                    <th class="py-3 px-4">Progress</th>
-                    <th class="py-3 px-4 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="project-list-tbody">
-                  <!-- Example Row -->
-                  
-                  <!-- Repeat for more rows -->
-                </tbody>
-              </table>
+          <div class="flex flex-wrap justify-between items-center mb-4">
+            <div>
+              <h1 class="text-xl font-bold">Project List</h1>
+              <p class="text-sm text-gray-500">Manage your projects, capabilities, and milestones efficiently</p>
             </div>
-          </ul>
+            <div class="flex flex-wrap items-center space-x-2 mt-4 md:mt-0">
+              <input type="text" placeholder="Search projects..." class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <select class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <option value="all">All Status</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="planning">Planning</option>
+              </select>
+              <button class="text-blue-600 hover:underline" onclick="openCreateProjectModal()">
+                <i class="fas fa-list-ul text-sm"></i>  Create 
+              </button>
+            </div>
+          </div>  
+
+          <!-- Project List Table -->
+          <div class="bg-white p-4 overflow-x-auto border rounded">
+            <table class="min-w-full table-auto">
+              <thead>
+                <tr class="text-left text-sm font-semibold text-gray-600 border-b border-gray-300">
+                  <th class="py-3 px-4">Project Name</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Capabilities</th>
+                  <th class="py-3 px-4">Start Date</th>
+                  <th class="py-3 px-4">End Date</th>
+                  <th class="py-3 px-4">Progress</th>
+                  <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="project-list-tbody">
+                <!-- Project rows will be dynamically added here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+            <div class="flex justify-between items-center mt-4">
+              <div class="flex items-center space-x-2">
+                <label for="projectsPerPage" class="text-sm text-gray-600">Projects per page:</label>
+                <select id="projectsPerPage" class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+              <div class="flex justify-end items-center space-x-2 text-sm">
+                <button id="prevPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center"
+                  disabled>
+                  <i class="fas fa-chevron-left mr-2"></i> Previous
+                </button>
+                <div id="pageInfo" class="text-sm text-gray-600">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></div>
+                <button id="nextPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center">
+                  Next <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+              </div>
+          </div>
         </div>
-
-
         <!-- Project Detail View (Hidden by Default) -->
         <div id="project-detail-view" class="space-y-4 hidden">
           <h2 class="text-xl font-semibold mb-3">Project Details</h2>
@@ -239,7 +270,6 @@
             </ul>
           </div>
         </div>
-
         <!-- Test Execution View (Hidden by Default) -->
         <div id="test-execution-view" class="space-y-4 hidden">
           <h2 class="text-xl font-semibold mb-3">Test Execution</h2>
@@ -250,7 +280,6 @@
             <p class="text-sm text-gray-600">Execute the tests and generate reports based on the results.</p>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -315,13 +344,15 @@
   <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
     <h2 class="text-lg font-semibold mb-4">Create New Project</h2>
     <form id="create-project-form">
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700">Project ID</label>
-        <input type="text" id="project-id" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
-      </div>
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700">Project Name</label>
-        <input type="text" id="project-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+      <div class="mb-4 flex space-x-4">
+        <div class="w-1/3">
+          <label class="block text-sm font-medium text-gray-700">Project ID</label>
+          <input type="text" id="project-id" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="w-2/3">
+          <label class="block text-sm font-medium text-gray-700">Project Name</label>
+          <input type="text" id="project-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
       </div>
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Description</label>
