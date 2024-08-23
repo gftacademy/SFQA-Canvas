@@ -125,6 +125,7 @@ function saveProjectsToLocalStorage() {
   function deleteProject(projectId) {
     projects = projects.filter(project => project.id !== projectId);
     saveAndUpdateProjects();
+      showToast('project deleted successfully');
   }
   
   // Manage Capabilities
@@ -400,9 +401,11 @@ function openCreateProjectModal() {
     if (existingProjectIndex !== -1) {
       // Update existing project
       projects[existingProjectIndex] = projectData;
+        showToast('project updated successfully');
     } else {
       // Create new project
       projects.push(projectData);
+        showToast('project created successfully');
     }
   
     saveAndUpdateProjects();
