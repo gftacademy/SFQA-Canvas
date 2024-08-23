@@ -224,7 +224,7 @@ function saveProjectsToLocalStorage() {
 
       row.innerHTML = `
         <td class="py-3 px-4 flex items-center text-sm text-gray-800">
-          <i class="fas fa-folder-open text-blue-500 mr-3"></i> ${project.name}
+          <i class="fas fa-folder-open text-blue-500 mr-3"></i> ${project.name } 
         </td>
         <td class="py-3 px-4 text-sm">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClass(project.status)}">
@@ -248,7 +248,7 @@ function saveProjectsToLocalStorage() {
           <button class="text-blue-600 hover:underline" onclick="viewProjectDetails('${project.id}')">
             <i class="fas fa-eye"></i> View
           </button>
-          <button class="text-green-600 hover:underline ml-3" onclick="editProject('${project.id}')">
+          <button class="text-green-600 hover:underline ml-3" onclick="openEditProjectModal('${project.id}')">
             <i class="fas fa-edit"></i> Edit
           </button>
           <button class="text-red-600 hover:underline ml-3" onclick="deleteProject('${project.id}')">
@@ -378,12 +378,15 @@ function openCreateProjectModal() {
     updateMilestonesList();
   }
   
-  // Fungsi untuk Menyimpan Proyek Baru
+  // Fungsi untuk Menyimpan Proyek Baru dan Update
   document.getElementById('create-project-form').addEventListener('submit', function (e) {
     e.preventDefault();
   
-    const newProject = {
-      id: document.getElementById('project-id').value.trim(),
+    const projectId = document.getElementById('project-id').value.trim();
+    const existingProjectIndex = projects.findIndex(project => project.id === projectId);
+  
+    const projectData = {
+      id: projectId,
       name: document.getElementById('project-name').value.trim(),
       description: document.getElementById('project-description').value.trim(),
       status: document.getElementById('project-status').value,
@@ -391,10 +394,17 @@ function openCreateProjectModal() {
       endDate: document.getElementById('project-end-date').value,
       capabilities: [...currentCapabilities],
       milestones: [...currentMilestones],
-      progress : 0
+      progress: existingProjectIndex !== -1 ? projects[existingProjectIndex].progress : 0
     };
   
-    projects.push(newProject);
+    if (existingProjectIndex !== -1) {
+      // Update existing project
+      projects[existingProjectIndex] = projectData;
+    } else {
+      // Create new project
+      projects.push(projectData);
+    }
+  
     saveAndUpdateProjects();
     closeCreateProjectModal();
   });
@@ -466,22 +476,28 @@ function openCreateProjectModal() {
     }
   }
 
-  // Placeholder functions for View, Edit, and Delete actions
-  function viewProject(id) {
-    alert(`Viewing details for project ID: ${id}`);
-    // Implement your logic here
-  }
-
-  function editProject(id) {
-    alert(`Editing project ID: ${id}`);
-    // Implement your logic here
-  }
-
   function deleteProject(id) {
     const confirmation = confirm(`Are you sure you want to delete project ID: ${id}?`);
     if (confirmation) {
       projects = projects.filter(project => project.id !== id);
       loadProjectList(); // Reload the list after deletion
+    }
+  }
+
+  function openEditProjectModal(id) {
+    const project = projects.find(p => p.id === id);
+    if (project) {
+      document.getElementById('project-id').value = project.id;
+      document.getElementById('project-name').value = project.name;
+      document.getElementById('project-description').value = project.description;
+      document.getElementById('project-status').value = project.status;
+      document.getElementById('project-start-date').value = project.startDate;
+      document.getElementById('project-end-date').value = project.endDate;
+      document.getElementById('create-project-modal').classList.remove('hidden');
+      currentCapabilities = project.capabilities;
+      currentMilestones = project.milestones;
+      updateCapabilitiesList();
+      updateMilestonesList();
     }
   }
       // Load the project list on page load
