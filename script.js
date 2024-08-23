@@ -500,5 +500,18 @@ function openCreateProjectModal() {
       updateMilestonesList();
     }
   }
+  //<!-- Toast Notification -->
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    toastMessage.textContent = message;
+  
+    toast.classList.remove('hidden');
+    toast.classList.add('flex');
+  
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 3000); // Durasi tampil toast, dalam milidetik
+  }
       // Load the project list on page load
       loadDashboardData(); 
