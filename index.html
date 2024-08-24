@@ -1,527 +1,567 @@
-// Variabel Global
-let currentCapabilities = [];
-let currentMilestones = [];
-let projects = loadProjectsFromLocalStorage();
+<!DOCTYPE html>
+<html lang="en">
 
-// Helper function to save projects to Local Storage
-function saveProjectsToLocalStorage() {
-    localStorage.setItem('projects', JSON.stringify(projects));
-  }
-  // Helper function to load projects from Local Storage
-  function loadProjectsFromLocalStorage() {
-    const storedProjects = localStorage.getItem('projects');
-    return storedProjects ? JSON.parse(storedProjects) : [];
-  }
-  
-  // Load projects from Local Storage or use dummy data if empty
-  if (projects.length === 0) {
-    projects = [
-      {
-        id: 'P001',
-        name: 'Project A',
-        description: 'Project A Description',
-        status: 'In Progress',
-        startDate: '2023-08-01',
-        endDate: '2023-12-31',
-        capabilities: ['Feature 1', 'Feature 2', 'Feature 3'],
-        milestones: [
-          {
-            name: 'Milestone 1',
-            useCases: ['Use Case 1', 'Use Case 2'],
-            deliverables: [
-              {
-                name: 'Deliverable 1',
-                details: 'Technical details for deliverable 1'
-              },
-              {
-                name: 'Deliverable 2',
-                details: 'Technical details for deliverable 2'
-              }
-            ],
-            completed: true
-          },
-          {
-            name: 'Milestone 2',
-            useCases: ['Use Case 3'],
-            deliverables: [
-              {
-                name: 'Deliverable 3',
-                details: 'Technical details for deliverable 3'
-              }
-            ],
-            completed: false
-          }
-        ]
-      }
-    ];
-    saveProjectsToLocalStorage(); // Save the initial data to Local Storage
-  }
-  
-  // Calculate project progress
-  function calculateProgress(milestones) {
-    const completedMilestones = milestones.filter(milestone => milestone.completed).length;
-    return Math.round((completedMilestones / milestones.length) * 100);
-  }
-  
-  
-  // View project details
-  function viewProjectDetails(projectId) {
-    const project = projects.find(p => p.id === projectId);
-    if (project) {
-      document.getElementById('project-list-view').classList.add('hidden');
-      document.getElementById('project-detail-view').classList.remove('hidden');
-  
-      document.getElementById('project-name-detail').textContent = project.name;
-      document.getElementById('project-description-detail').textContent = project.description;
-  
-      // Populate capability list
-      const capabilityList = document.getElementById('capability-list');
-      capabilityList.innerHTML = ''; // Clear previous items
-      project.capabilities.forEach(capability => {
-        const listItem = document.createElement('li');
-        listItem.textContent = capability;
-        capabilityList.appendChild(listItem);
-      });
-  
-      // Populate milestone list with deliverables
-      const milestoneList = document.getElementById('milestone-list');
-      milestoneList.innerHTML = ''; // Clear previous items
-      project.milestones.forEach(milestone => {
-        const listItem = document.createElement('li');
-        listItem.className = 'p-4 bg-gray-100 rounded-lg shadow';
-        listItem.innerHTML = `
-          <span class="font-semibold">${milestone.name}</span>
-          <ul class="list-disc ml-5 mt-1">
-            ${milestone.useCases.map(useCase => `<li>${useCase}</li>`).join('')}
-          </ul>
-        `;
-        listItem.appendChild(loadDeliverables(milestone));
-        milestoneList.appendChild(listItem);
-      });
-    } else{
-      alert('project tidak ditemukan')
-    }
-  }
-  
-  // Load Deliverables into the UI
-  function loadDeliverables(milestone) {
-    const deliverableList = document.createElement('ul');
-    deliverableList.className = 'list-disc ml-5 mt-1';
-    milestone.deliverables.forEach(deliverable => {
-      const deliverableItem = document.createElement('li');
-      deliverableItem.innerHTML = `<strong>${deliverable.name}</strong>: ${deliverable.details}`;
-      deliverableList.appendChild(deliverableItem);
-    });
-    return deliverableList;
-  }
-  
-  // Save projects back to Local Storage after any changes
-  function saveAndUpdateProjects() {
-    saveProjectsToLocalStorage();
-    loadProjectList();
-  }
-  
-  // Delete project
-  function deleteProject(projectId) {
-    const confirmation = confirm(`Are you sure to delete project ID: ${projectId}?`);
-    if (confirmation){
-    projects = projects.filter(project => project.id !== projectId);
-    currentPage = 1; // Reset ke halaman pertama saat jumlah per halaman diubah
-    showToast('Project deleted successfully');
-    saveAndUpdateProjects();
-    };
-  }
-  
-  // Manage Capabilities
-  function openCapabilityModal() {
-    document.getElementById('capabilities-modal').classList.remove('hidden');
-  }
-  
-  function closeCapabilityModal() {
-    document.getElementById('capabilities-modal').classList.add('hidden');
-    document.getElementById('capability-name').value = '';
-  }
-  
-  document.getElementById('capability-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const capabilityName = document.getElementById('capability-name').value;
-    if (capabilityName) {
-      const activeProject = projects.find(project => project.id === currentProjectId);
-      activeProject.capabilities.push(capabilityName);
-      saveAndUpdateProjects();
-      closeCapabilityModal();
-    }
-  });
-  
-  // Manage Milestones
-  function openMilestoneModal() {
-    document.getElementById('milestone-modal').classList.remove('hidden');
-  }
-  
-  function closeMilestoneModal() {
-    document.getElementById('milestone-modal').classList.add('hidden');
-    document.getElementById('milestone-name').value = '';
-  }
-  
-  document.getElementById('milestone-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const milestoneName = document.getElementById('milestone-name').value;
-    if (milestoneName) {
-      const activeProject = projects.find(project => project.id === currentProjectId);
-      activeProject.milestones.push({
-        name: milestoneName,
-        useCases: [],
-        deliverables: [],
-        completed: false
-      });
-      saveAndUpdateProjects();
-      closeMilestoneModal();
-    }
-  });
-  
-  // Manage Deliverables
-  function openDeliverableModal() {
-    document.getElementById('deliverable-modal').classList.remove('hidden');
-  }
-  
-    function closeDeliverableModal() {
-        document.getElementById('deliverable-modal').classList.add('hidden');
-        document.getElementById('deliverable-name').value = '';
-        document.getElementById('deliverable-details').value = '';
-      }
-      
-      document.getElementById('deliverable-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const deliverableName = document.getElementById('deliverable-name').value;
-        const deliverableDetails = document.getElementById('deliverable-details').value;
-        if (deliverableName && deliverableDetails) {
-          const activeProject = projects.find(project => project.id === currentProjectId);
-          const activeMilestone = activeProject.milestones.find(milestone => milestone.name === currentMilestoneName);
-          activeMilestone.deliverables.push({
-            name: deliverableName,
-            details: deliverableDetails
-          });
-          saveAndUpdateProjects();
-          closeDeliverableModal();
-        }
-      });
-          // Function to load and display the project list in the table
-          let currentPage = 1;
-          let itemsPerPage = 5;
-          document.getElementById('projectsPerPage').value=5; // Default projects per page    
-          // Fungsi untuk menghitung total halaman
-          function calculateTotalPages() {
-            return Math.ceil(projects.length / itemsPerPage);
-          }
-      
-  function loadProjectList() {
-    const tableBody = document.getElementById("project-list-tbody");
-    tableBody.innerHTML = ''; // Clear existing rows
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SF-QA Canvas Dashboard</title>
+  <!-- Import Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Font Awesome via CDNJS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedProjects = projects.slice(startIndex, endIndex);
+<body class="bg-gray-50 text-gray-800">
+  <!-- Wrapper Container -->
+  <div class="flex h-screen">
 
-    paginatedProjects.forEach(project => {
-      const row = document.createElement('tr');
-      row.classList.add('hover:bg-gray-100', 'transition-colors', 'border-b', 'border-gray-300');
-
-      row.innerHTML = `
-        <td class="py-3 px-4 flex items-center text-sm text-gray-800">
-          <i class="fas fa-folder-open text-blue-500 mr-3"></i> ${project.name } 
-        </td>
-        <td class="py-3 px-4 text-sm">
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClass(project.status)}">
-            <i class="fas fa-tasks mr-1"></i> ${project.status}
-          </span>
-        </td>
-        <td class="py-3 px-4 text-sm text-gray-600">
-          <ul class="list-disc pl-5">
-            ${project.capabilities.map(cap => `<li>${cap}</li>`).join('')}
-          </ul>
-        </td>
-        <td class="py-3 px-4 text-sm text-gray-600">${project.startDate}</td>
-        <td class="py-3 px-4 text-sm text-gray-600">${project.endDate}</td>
-        <td class="py-3 px-4 text-sm text-gray-600">
-          <div class="w-full bg-gray-200 rounded-full h-2">
-            <div class="bg-blue-500 h-2 rounded-full" style="width: ${project.progress}%;"></div>
+    <!-- Left Sidebar -->
+    <div class="w-60 bg-gray-900 text-white flex-shrink-0">
+        <!-- App Title and Subtitle -->
+        <div class="p-4 text-center border-b border-gray-700">
+          <div class="flex justify-center items-center space-x-3">
+            <!-- Ikon yang Menarik -->
+            <i class="fas fa-clipboard-check text-3xl text-blue-500"></i>
+            <div>
+              <h1 class="text-2xl font-bold text-white">SFactory-QA</h1>
+              <p class="text-sm text-gray-400">Quality Assurance Tool</p>
+            </div>
           </div>
-          <div class="text-xs text-gray-500 mt-1">${project.progress}% Complete</div>
-        </td>
-        <td class="py-3 px-4 text-center text-sm">
-          <button class="text-blue-600 hover:underline" onclick="viewProjectDetails('${project.id}')">
-            <i class="fas fa-eye"></i> View
-          </button>
-          <button class="text-green-600 hover:underline ml-3" onclick="openEditProjectModal('${project.id}')">
-            <i class="fas fa-edit"></i> Edit
-          </button>
-          <button class="text-red-600 hover:underline ml-3" onclick="deleteProject('${project.id}')">
-            <i class="fas fa-trash-alt"></i> Delete
-          </button>
-        </td>
-      `;
-      tableBody.appendChild(row);
-    });
-    updatePaginationControls();
-  }
-  // Fungsi untuk memperbarui kontrol pagination
-function updatePaginationControls() {
-  document.getElementById('currentPage').textContent = currentPage;
-  document.getElementById('totalPages').textContent = calculateTotalPages();
-  document.getElementById('prevPage').disabled = currentPage === 1;
-  document.getElementById('nextPage').disabled = currentPage === calculateTotalPages();
-}
+        </div>
 
-// Event listener untuk tombol sebelumnya
-document.getElementById('prevPage').addEventListener('click', () => {
-  if (currentPage > 1) {
-    currentPage--;
-    loadProjectList();
-  }
-});
+  <!-- User Profile Section -->
+  <div class="p-4 flex items-center border-b border-gray-700">
+    <img src="https://api-portfolio.gft.academy/storage/images/fileAlbum_1724168123796.png" alt="User Pic" class="w-12 h-12 rounded-full mr-3">
+    <div>
+      <p class="text-lg font-medium">N. Santoso</p>
+      <p class="text-sm text-gray-400">Solution Architect</p>
+    </div>
+  </div>
+      <ul class="mt-4 space-y-2">
+        <!-- Level 1 Items -->
+        <!-- Dashboard Menu -->
+        <li>
+          <a href="#" id="dashboard-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
+            <i class="fas fa-tachometer-alt mr-2"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" id="project-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
+            <i class="fas fa-project-diagram mr-2"></i>
+            <span>Project Management</span>
+          </a>
+          <!-- Submenu for Create Project -->
+          <!-- <ul class="ml-8 mt-2 space-y-1">
+            <li>
+              <a href="#" id="create-project-link" class="block py-2 px-4 hover:bg-gray-700" onclick="openCreateProjectModal()">
+                <i class="fas fa-plus-circle mr-2"></i>
+                Create Project
+              </a>
+            </li>
+          </ul> -->
+        </li>
+        <li>
+          <a href="#" id="milestone-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openMilestoneModal()">
+            <i class="fas fa-calendar-check mr-2"></i>
+            Milestone Planning
+          </a>
+        </li>
+        <li>
+          <a href="#" id="deliverable-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openDeliverableModal()">
+            <i class="fas fa-clipboard-list mr-2"></i>
+            Deliverable Breakout
+          </a>
+        </li>
+        <li>
+          <a href="#" id="capabilities-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openCapabilityModal()">
+            <i class="fas fa-tasks mr-2"></i>
+            Testcase Design
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="#" id="test-execution-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
+            <i class="fas fa-vial mr-2"></i>
+            <span>Test Execution</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-// Event listener untuk tombol berikutnya
-document.getElementById('nextPage').addEventListener('click', () => {
-  if (currentPage < calculateTotalPages()) {
-    currentPage++;
-    loadProjectList();
-  }
-});
-    // Event listener untuk dropdown items per page
-document.getElementById('projectsPerPage').addEventListener('change', (event) => {
-  itemsPerPage = parseInt(event.target.value);
-  currentPage = 1; // Reset ke halaman pertama saat jumlah per halaman diubah
-  loadProjectList();
-});
-      // Event listeners for navigation
-      document.getElementById('project-management-link').addEventListener('click', function () {
-        document.getElementById('dashboard-view').classList.add('hidden');
-        document.getElementById('project-list-view').classList.remove('hidden');
-        document.getElementById('project-detail-view').classList.add('hidden');
-        document.getElementById('test-execution-view').classList.add('hidden');
-        loadProjectList();
-      });
-      
-      document.getElementById('milestone-management-link').addEventListener('click', openMilestoneModal);
-      document.getElementById('test-execution-link').addEventListener('click', function () {
-        document.getElementById('project-list-view').classList.add('hidden');
-        document.getElementById('project-detail-view').classList.add('hidden');
-        document.getElementById('test-execution-view').classList.remove('hidden');
-      });
-      
-// Open and Close Modals
-// Fungsi untuk Membuka Modal Create Project
-function openCreateProjectModal() {
-    document.getElementById('create-project-modal').classList.remove('hidden');
-  }
-  
-  // Fungsi untuk Menutup Modal Create Project
-  function closeCreateProjectModal() {
-    document.getElementById('create-project-modal').classList.add('hidden');
-    document.getElementById('create-project-form').reset();
-    currentCapabilities = [];
-    currentMilestones = [];
-    updateCapabilitiesList();
-    updateMilestonesList();
-  }
-  
-  // Fungsi untuk Menambah Capabilities
-  function addCapability() {
-    const capability = document.getElementById('new-capability').value.trim();
-    if (capability) {
-      currentCapabilities.push(capability);
-      updateCapabilitiesList();
-      document.getElementById('new-capability').value = '';
-    }
-  }
-  
-  function updateCapabilitiesList() {
-    const list = document.getElementById('capabilities-list');
-    list.innerHTML = '';
-    currentCapabilities.forEach((capability, index) => {
-      const listItem = document.createElement('li');
-      listItem.textContent = capability;
-      listItem.innerHTML += ` <button onclick="removeCapability(${index})" class="text-red-600 ml-2">Remove</button>`;
-      list.appendChild(listItem);
-    });
-  }
-  
-  function removeCapability(index) {
-    currentCapabilities.splice(index, 1);
-    updateCapabilitiesList();
-  }
-  
-  // Fungsi untuk Menambah Milestones
-  function addMilestone() {
-    const milestone = document.getElementById('new-milestone').value.trim();
-    if (milestone) {
-      currentMilestones.push({
-        name: milestone,
-        useCases: [],
-        deliverables: [],
-        completed: false
-      });
-      updateMilestonesList();
-      document.getElementById('new-milestone').value = '';
-    }
-  }
-  
-  function updateMilestonesList() {
-    const list = document.getElementById('milestones-list');
-    list.innerHTML = '';
-    currentMilestones.forEach((milestone, index) => {
-      const listItem = document.createElement('li');
-      listItem.textContent = milestone.name;
-      listItem.innerHTML += ` <button onclick="removeMilestone(${index})" class="text-red-600 ml-2">Remove</button>`;
-      list.appendChild(listItem);
-    });
-  }
-  
-  function removeMilestone(index) {
-    currentMilestones.splice(index, 1);
-    updateMilestonesList();
-  }
-  
-  // Fungsi untuk Menyimpan Proyek Baru dan Update
-  document.getElementById('create-project-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-  
-    const projectId = document.getElementById('project-id').value.trim();
-    const existingProjectIndex = projects.findIndex(project => project.id === projectId);
-  
-    const projectData = {
-      id: projectId,
-      name: document.getElementById('project-name').value.trim(),
-      description: document.getElementById('project-description').value.trim(),
-      status: document.getElementById('project-status').value,
-      startDate: document.getElementById('project-start-date').value,
-      endDate: document.getElementById('project-end-date').value,
-      capabilities: [...currentCapabilities],
-      milestones: [...currentMilestones],
-      progress: existingProjectIndex !== -1 ? projects[existingProjectIndex].progress : 0
-    };
-  
-    if (existingProjectIndex !== -1) {
-      // Update existing project
-      projects[existingProjectIndex] = projectData;
-      showToast('Project updated successfully!');
-    } else {
-      // Create new project
-      projects.push(projectData);
-      showToast('Project created successfully!');
-    }
-  
-    saveAndUpdateProjects();
-    closeCreateProjectModal();
-  });
-  
-  function saveAndUpdateProjects() {
-    saveProjectsToLocalStorage();
-    loadProjectList();
-  }
 
-      // Handle Dashboard Navigation
-      document.getElementById('dashboard-link').addEventListener('click', function () {
-        document.getElementById('dashboard-view').classList.remove('hidden');
-        document.getElementById('project-list-view').classList.add('hidden');
-        document.getElementById('project-detail-view').classList.add('hidden');
-        document.getElementById('test-execution-view').classList.add('hidden');
-        loadDashboardData();
-      });
-      
-      function loadDashboardData(){
-        document.getElementById('dashboard-view').classList.remove('hidden');
-        // Summary Data
-        const totalProjects = projects.length;
-        const completedProjects = projects.filter(project => project.status === 'Completed').length;
-        const ongoingProjects = projects.filter(project => project.status === 'In Progress').length;
-        const teamMembers = 32; // Example static value, you can replace this with dynamic data
-      
-        // Update Summary Cards
-        document.querySelector('.summary-total-projects').textContent = totalProjects;
-        document.querySelector('.summary-completed-projects').textContent = completedProjects;
-        document.querySelector('.summary-ongoing-projects').textContent = ongoingProjects;
-        document.querySelector('.summary-team-members').textContent = teamMembers;
-    // Populate Recent Projects Table
-      const recentProjectList = document.getElementById('recent-project-list');
-      recentProjectList.innerHTML = '';
-      projects.forEach(project =>{
-        const row = document.createElement('tr');
-      row.classList.add('border-b');
-      row.innerHTML = `
-        <td class="p-2 text-sm">${project.id}</td>
-        <td class="p-2 text-sm">${project.name}</td>
-        <td class="p-2 text-sm">${project.capabilities.length}</td>
-        <td class="p-2 text-sm">${project.milestones.length}</td>
-        <td class="p-2 text-sm"><span class="text-${project.status === 'Completed' ? 'green' : project.status === 'In Progress' ? 'yellow' : 'blue'}-500 font-medium">${project.status}</span></td>
-          <td class="p-2 text-sm">
-            <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-${project.status === 'Completed' ? 'green' : project.status === 'In Progress' ? 'yellow' : 'blue'}-500 h-2 rounded-full" style="width: ${project.progress}%"></div>
+    <!-- Main Content -->
+    <div class="flex flex-col flex-grow">
+
+      <!-- Top Navbar -->
+      <div class="bg-white shadow p-3 flex justify-between items-center">
+        <div class="text-lg font-medium">QA Dashboard</div>
+        <div>
+          <input type="text" placeholder="Search..." class="p-2 border rounded text-sm focus:outline-none">
+          <a href="#" class="ml-3 text-gray-700 hover:text-gray-500">Profile</a>
+        </div>
+      </div>
+
+
+      <!-- Dynamic Content Area -->
+      <div id="main-content" class="p-4 flex-grow space-y-6">
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="space-y-6 hidden">
+          <!-- Summary Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div class="bg-white p-4 rounded shadow">
+              <div class="flex items-center">
+                <i class="fas fa-tasks text-2xl text-blue-500 mr-3"></i>
+                <div>
+                  <p class="text-lg font-semibold">Total Projects</p>
+                  <p class="text-2xl font-bold summary-total-projects">0</p>
+                </div>
               </div>
             </div>
-          </td>
-          <td class="p-2 text-sm">${project.endDate}</td>
-      `;
-      recentProjectList.appendChild(row); 
-      });     
-      }
+            <div class="bg-white p-4 rounded shadow">
+              <div class="flex items-center">
+                <i class="fas fa-check-circle text-2xl text-green-500 mr-3"></i>
+                <div>
+                  <p class="text-lg font-semibold">Completed Projects</p>
+                  <p class="text-2xl font-bold summary-completed-projects">0</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+              <div class="flex items-center">
+                <i class="fas fa-spinner text-2xl text-yellow-500 mr-3"></i>
+                <div>
+                  <p class="text-lg font-semibold">Ongoing Projects</p>
+                  <p class="text-2xl font-bold summary-ongoing-projects">0</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+              <div class="flex items-center">
+                <i class="fas fa-users text-2xl text-purple-500 mr-3"></i>
+                <div>
+                  <p class="text-lg font-semibold">Team Members</p>
+                  <p class="text-2xl font-bold summary-team-members">32</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  
+          <!-- Recent Projects Table -->
+          <div class="bg-white p-6 rounded shadow mb-6 overflow-x-auto">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-semibold">Recent Projects</h3>
+              <a href="#" class="text-blue-500 hover:underline">View All</a>
+            </div>
+            <table class="w-full table-auto">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="p-3 text-left text-sm font-semibold">Id</th>
+                  <th class="p-3 text-left text-sm font-semibold">Project Name</th>
+                  <th class="p-3 text-left text-sm font-semibold">Capabilties</th>
+                  <th class="p-3 text-left text-sm font-semibold">Milestones</th>
+                  <th class="p-3 text-left text-sm font-semibold">Status</th>
+                  <th class="p-3 text-left text-sm font-semibold">Progress</th>
+                  <th class="p-3 text-left text-sm font-semibold">Deadline</th>
+                </tr>
+              </thead>
+              <tbody id="recent-project-list">
+                <!-- Project Rows will be dynamically added here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-  // Function to get the appropriate status class for the badge
-  function getStatusClass(status) {
-    switch (status) {
-      case 'In Progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'Completed':
-        return 'bg-green-100 text-green-800';
-      case 'Planning':
-        return 'bg-yellow-100 text-yellow-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  }
+        <!-- Project Management View -->
+        <div id="project-list-view" class="space-y-4 hidden">
+          
+          <div class="flex flex-wrap justify-between items-center mb-4">
+            <div>
+              <h1 class="text-xl font-bold">Project List</h1>
+              <p class="text-sm text-gray-500">Manage your projects, capabilities, and milestones efficiently</p>
+            </div>
+            <div class="flex flex-wrap items-center space-x-2 mt-4 md:mt-0">
+              <input type="text" placeholder="Search projects..." class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <select class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <option value="all">All Status</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="planning">Planning</option>
+              </select>
+              <button class="text-blue-600 hover:underline" onclick="openCreateProjectModal()">
+                <i class="fas fa-list-ul text-sm"></i>  Create 
+              </button>
+            </div>
+          </div>  
 
-  function openEditProjectModal(id) {
-    const project = projects.find(p => p.id === id);
-    if (project) {
-      document.getElementById('project-id').value = project.id;
-      document.getElementById('project-name').value = project.name;
-      document.getElementById('project-description').value = project.description;
-      document.getElementById('project-status').value = project.status;
-      document.getElementById('project-start-date').value = project.startDate;
-      document.getElementById('project-end-date').value = project.endDate;
-      document.getElementById('create-project-modal').classList.remove('hidden');
-      currentCapabilities = project.capabilities;
-      currentMilestones = project.milestones;
-      updateCapabilitiesList();
-      updateMilestonesList();
-    }
-  }
-  //<!-- Toast Notification -->
-  function showToast(message) {
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toast-message');
-    toastMessage.textContent = message;
-  
-    toast.classList.remove('hidden');
-    toast.classList.add('flex');
-  
-    setTimeout(() => {
-      toast.classList.add('hidden');
-    }, 3000); // Durasi tampil toast, dalam milidetik
-  }
+          <!-- Project List Table -->
+          <div class="bg-white p-4 overflow-x-auto border rounded">
+            <table class="min-w-full table-auto">
+              <thead>
+                <tr class="text-left text-sm font-semibold text-gray-600 border-b border-gray-300">
+                  <th class="py-3 px-4">Project Name</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Capabilities</th>
+                  <th class="py-3 px-4">Start Date</th>
+                  <th class="py-3 px-4">End Date</th>
+                  <th class="py-3 px-4">Progress</th>
+                  <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="project-list-tbody">
+                <!-- Project rows will be dynamically added here -->
+              </tbody>
+            </table>
+          </div>
 
-  function showQATab(event, sectionId) {
-    event.preventDefault();
-    // Remove 'active' class from all tabs
-    document.querySelectorAll('.qa-tab-menu a').forEach(tab => tab.classList.remove('active'));
-    // Hide all content sections
-    document.querySelectorAll('.content-section').forEach(section => section.classList.add('hidden'));
+          <!-- Pagination Controls -->
+            <div class="flex justify-between items-center mt-4">
+              <div class="flex items-center space-x-2">
+                <label for="projectsPerPage" class="text-sm text-gray-600">Projects per page:</label>
+                <select id="projectsPerPage" class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+              <div class="flex justify-end items-center space-x-2 text-sm">
+                <button id="prevPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center"
+                  disabled>
+                  <i class="fas fa-chevron-left mr-2"></i> Previous
+                </button>
+                <div id="pageInfo" class="text-sm text-gray-600">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></div>
+                <button id="nextPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center">
+                  Next <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+              </div>
+          </div>
+        </div>
+        <!-- Project Detail View (Hidden by Default) -->
+        <div id="project-detail-view" class="space-y-4 hidden">
+          <!-- <h2 class="text-xl font-semibold mb-3">Project Details</h2> -->
+            <!-- Horizontal Menu for QA Cycle Tabs -->
+            <div class="border-b border-gray-00 mb-4 ">
+              <nav class="qa-tab-menu flex space-x-4">
+                <a href="#" onclick="showQATab(event, 'project-overview')" class="active">Project Overview</a>
+                <a href="#" onclick="showQATab(event, 'milestone-planning')">Milestone Planning</a>
+                <a href="#" onclick="showQATab(event, 'deliverable-breakdown')">Deliverable Breakdown</a>
+                <a href="#" onclick="showQATab(event, 'test-execution')">Test Execution</a>
+                <a href="#" onclick="showQATab(event, 'reporting-review')">Reporting & Review</a>
+              </nav>
+            </div>
 
-    // Add 'active' class to the clicked tab and display corresponding section
-    event.currentTarget.classList.add('active');
-    document.getElementById(sectionId).classList.remove('hidden');
-}
-      // Load the project list on page load
-      loadDashboardData(); 
+            <!-- Dynamic Content Areas -->
+                <!-- Project Overview -->
+            <div id="project-overview" class="content-section active">
+              <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 id="project-name-detail" class="text-xl font-bold mb-2">Project Name</h3>
+                    <p id="project-description-detail" class="text-gray-700 mb-4">Project description goes here...</p>
+                
+                    <!-- Capabilities Section -->
+                    <h4 class="text-lg font-medium mb-2"><i class="fas fa-cogs mr-2"></i>Capabilities / Features</h4>
+                    <ul id="capability-list" class="space-y-2 ml-5 list-disc text-gray-700">
+                      <!-- Capabilities will be dynamically added here -->
+                    </ul>
+                
+                    <!-- Milestones Section -->
+                    <h4 class="text-lg font-medium mt-6 mb-2"><i class="fas fa-calendar-alt mr-2"></i>Milestones</h4>
+                    <ul id="milestone-list" class="space-y-4">
+                      <!-- Milestones will be dynamically added here -->
+                    </ul>
+              </div>
+            </div>
+            <!-- Milestone Planning -->
+        <div id="milestone-planning" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Milestone Planning</h2>
+            <p class="mb-4">Plan and organize milestones for project, ensuring key objectives are clearly defined and scheduled.</p>
+
+<!-- Milestone Cards (Kanban Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 1</h3>
+    <p class="text-sm text-gray-600">Objective: Initial Setup and Planning.</p>
+    <p class="text-sm text-gray-600">Deadline: 15/09/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 2</h3>
+    <p class="text-sm text-gray-600">Objective: Feature Implementation.</p>
+    <p class="text-sm text-gray-600">Deadline: 01/11/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 3</h3>
+    <p class="text-sm text-gray-600">Objective: Testing and Bug Fixes.</p>
+    <p class="text-sm text-gray-600">Deadline: 01/12/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 4</h3>
+    <p class="text-sm text-gray-600">Objective: Final Review and Deployment.</p>
+    <p class="text-sm text-gray-600">Deadline: 31/12/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+</div>
+
+<!-- Milestone Detail View (Hidden by Default) -->
+<div id="milestone-detail-view" class="bg-white p-4 ">
+  <h3 class="text-2xl font-semibold mb-3">Milestone 1: Initial Setup and Planning</h3>
+  <p class="text-gray-600 mb-3">Detailed description and objectives of the milestone.</p>
+
+  <!-- Deliverables Table -->
+  <table class="min-w-full table-auto">
+    <thead>
+      <tr class="bg-gray-200 text-gray-600 text-left text-sm font-semibold">
+        <th class="py-3 px-4">Deliverable</th>
+        <th class="py-3 px-4">Description</th>
+        <th class="py-3 px-4">Status</th>
+        <th class="py-3 px-4">Deadline</th>
+      </tr>
+    </thead>
+    <tbody class="text-sm text-gray-600">
+      <tr class="border-b border-gray-300">
+        <td class="py-3 px-4">Requirement Analysis</td>
+        <td class="py-3 px-4">Analyze client requirements and draft initial documentation.</td>
+        <td class="py-3 px-4">Completed</td>
+        <td class="py-3 px-4">05/09/2024</td>
+      </tr>
+      <tr class="border-b border-gray-300">
+        <td class="py-3 px-4">Project Setup</td>
+        <td class="py-3 px-4">Setup project repositories, environments, and initial configurations.</td>
+        <td class="py-3 px-4">In Progress</td>
+        <td class="py-3 px-4">10/09/2024</td>
+      </tr>
+      <tr class="border-b border-gray-300">
+        <td class="py-3 px-4">Kickoff Meeting</td>
+        <td class="py-3 px-4">Organize kickoff meeting with stakeholders.</td>
+        <td class="py-3 px-4">Pending</td>
+        <td class="py-3 px-4">15/09/2024</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+            <!-- <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Current Milestone: User Onboarding</h3>
+                <p class="text-sm text-gray-600">Start Date: August 1, 2023 | End Date: September 15, 2023</p>
+                <p class="text-sm text-gray-600">Objectives: Complete registration flow, validate API integration.</p>
+                <div class="mt-4">
+                    <h4 class="font-semibold text-gray-700">Milestone Progress</h4>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%;"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">50% Complete</p>
+                </div>
+            </div> -->   
+        </div>
+      </div>
+
+        <!-- Deliverable Breakdown -->
+        
+        <div id="deliverable-breakdown" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Deliverable Breakdown</h2>
+            <p>Break down the User Onboarding milestone into specific deliverables that need to be developed and tested.</p>
+                <h3 class="font-semibold text-gray-700">Deliverables for User Onboarding</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li>API Endpoint Testing</li>
+                    <li>UI Form Validation</li>
+                    <li>Data Encryption & Security Checks</li>
+                </ul>
+          </div>
+        </div>
+
+        <!-- Test Case Design -->
+        <div id="test-case-design" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Test Case Design</h2>
+            <p>Design test cases for each deliverable, ensuring they cover the critical scenarios.</p>
+            <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Test Cases for API Endpoint Testing</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li>Valid API requests and responses</li>
+                    <li>Error handling for invalid inputs</li>
+                    <li>Load testing under high traffic</li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <!-- Test Execution -->
+        <div id="test-execution" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Test Execution</h2>
+            <p>Track the execution of test cases and manage test runs for Project A.</p>
+            <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Current Test Execution</h3>
+                <p class="text-sm text-gray-600">API Endpoint Testing - In Progress</p>
+                <p class="text-sm text-gray-600">Total Test Cases: 10 | Passed: 6 | Failed: 2 | Blocked: 2</p>
+            </div>
+            </div>
+        </div>
+
+        <!-- Reporting & Review -->
+        <div id="reporting-review" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Reporting & Review</h2>
+            <p>Generate reports and review test results to identify areas of improvement.</p>
+            <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Last Test Report</h3>
+                <p class="text-sm text-gray-600">Overall Test Coverage: 80%</p>
+                <p class="text-sm text-gray-600">Critical Bugs Found: 3</p>
+            </div>
+            </div>
+        </div>
+
+        </div>
+        <!-- Test Execution View (Hidden by Default) -->
+        <div id="test-execution-view" class="space-y-4 hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+          <h2 class="text-xl font-semibold mb-3">Test Execution</h2>
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="text-lg font-medium">Test Planning & Preparation</h3>
+            <p class="text-sm text-gray-600">Plan and prepare the test cases before execution.</p>
+            <h3 class="text-lg font-medium mt-4">Test Execution</h3>
+            <p class="text-sm text-gray-600">Execute the tests and generate reports based on the results.</p>
+          </div>
+        </div>
+        </body>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capabilities Management Modal -->
+  <div id="capabilities-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-lg font-semibold mb-4">Manage Capabilities</h2>
+      <form id="capability-form">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Capability Name</label>
+          <input type="text" id="capability-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeCapabilityModal()">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Milestone Management Modal -->
+  <div id="milestone-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-lg font-semibold mb-4">Manage Milestones</h2>
+      <form id="milestone-form">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Milestone Name</label>
+          <input type="text" id="milestone-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeMilestoneModal()">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Deliverable Management Modal -->
+  <div id="deliverable-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-lg font-semibold mb-4">Manage Deliverables</h2>
+      <form id="deliverable-form">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Deliverable Name</label>
+          <input type="text" id="deliverable-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Technical Details</label>
+          <textarea id="deliverable-details" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4" required></textarea>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeDeliverableModal()">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- Create Project Modal -->
+<div id="create-project-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+    <h2 class="text-lg font-semibold mb-4">Create New Project</h2>
+    <form id="create-project-form">
+      <div class="mb-4 flex space-x-4">
+        <div class="w-1/3">
+          <label class="block text-sm font-medium text-gray-700">Project ID</label>
+          <input type="text" id="project-id" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="w-2/3">
+          <label class="block text-sm font-medium text-gray-700">Project Name</label>
+          <input type="text" id="project-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea id="project-description" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4" required></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <select id="project-status" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+          <option value="On Hold">On Hold</option>
+        </select>
+      </div>
+      <div class="mb-4 flex space-x-4">
+        <div class="w-1/2">
+          <label class="block text-sm font-medium text-gray-700">Start Date</label>
+          <input type="date" id="project-start-date" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div class="w-1/2">
+          <label class="block text-sm font-medium text-gray-700">End Date</label>
+          <input type="date" id="project-end-date" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+      </div>
+
+      <!-- Capabilities Section -->
+      <div class="mb-4">
+        <h3 class="text-md font-semibold text-gray-700">Capabilities</h3>
+        <ul id="capabilities-list" class="list-disc ml-5 text-gray-700"></ul>
+        <input type="text" id="new-capability" placeholder="Add Capability" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600 mb-2">
+        <button type="button" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700" onclick="addCapability()">Add Capability</button>
+      </div>
+
+      <!-- Milestones Section -->
+      <div class="mb-4">
+        <h3 class="text-md font-semibold text-gray-700">Milestones</h3>
+        <ul id="milestones-list" class="list-disc ml-5 text-gray-700"></ul>
+        <input type="text" id="new-milestone" placeholder="Add Milestone" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600 mb-2">
+        <button type="button" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700" onclick="addMilestone()">Add Milestone</button>
+      </div>
+
+      <div class="flex justify-end space-x-2">
+        <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeCreateProjectModal()">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-lg shadow-lg hidden">
+  <span id="toast-message">Project created successfully!</span>
+</div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>
