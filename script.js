@@ -123,9 +123,13 @@ function saveProjectsToLocalStorage() {
   
   // Delete project
   function deleteProject(projectId) {
+    const confirmation = confirm(`Are you sure to delete project ID: ${projectId}?`);
+    if (confirmation){
     projects = projects.filter(project => project.id !== projectId);
+    currentPage = 1; // Reset ke halaman pertama saat jumlah per halaman diubah
+    showToast('Project deleted successfully');
     saveAndUpdateProjects();
-      showToast('project deleted successfully');
+    };
   }
   
   // Manage Capabilities
@@ -213,7 +217,6 @@ function saveProjectsToLocalStorage() {
   function loadProjectList() {
     const tableBody = document.getElementById("project-list-tbody");
     tableBody.innerHTML = ''; // Clear existing rows
-
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -401,11 +404,11 @@ function openCreateProjectModal() {
     if (existingProjectIndex !== -1) {
       // Update existing project
       projects[existingProjectIndex] = projectData;
-        showToast('project updated successfully');
+      showToast('Project updated successfully!');
     } else {
       // Create new project
       projects.push(projectData);
-        showToast('project created successfully');
+      showToast('Project created successfully!');
     }
   
     saveAndUpdateProjects();
@@ -479,14 +482,6 @@ function openCreateProjectModal() {
     }
   }
 
-  function deleteProject(id) {
-    const confirmation = confirm(`Are you sure you want to delete project ID: ${id}?`);
-    if (confirmation) {
-      projects = projects.filter(project => project.id !== id);
-      loadProjectList(); // Reload the list after deletion
-    }
-  }
-
   function openEditProjectModal(id) {
     const project = projects.find(p => p.id === id);
     if (project) {
@@ -516,5 +511,17 @@ function openCreateProjectModal() {
       toast.classList.add('hidden');
     }, 3000); // Durasi tampil toast, dalam milidetik
   }
+
+  function showQATab(event, sectionId) {
+    event.preventDefault();
+    // Remove 'active' class from all tabs
+    document.querySelectorAll('.qa-tab-menu a').forEach(tab => tab.classList.remove('active'));
+    // Hide all content sections
+    document.querySelectorAll('.content-section').forEach(section => section.classList.add('hidden'));
+
+    // Add 'active' class to the clicked tab and display corresponding section
+    event.currentTarget.classList.add('active');
+    document.getElementById(sectionId).classList.remove('hidden');
+}
       // Load the project list on page load
       loadDashboardData(); 
