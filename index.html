@@ -11,19 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <!-- Font Awesome via CDNJS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <style>
-    body {
-      font-family: 'Barlow', sans-serif;
-    }
-        /* Custom scrollbar styles */
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="bg-gray-50 text-gray-800">
@@ -67,33 +55,35 @@
             <span>Project Management</span>
           </a>
           <!-- Submenu for Create Project -->
-          <ul class="ml-8 mt-2 space-y-1">
+          <!-- <ul class="ml-8 mt-2 space-y-1">
             <li>
               <a href="#" id="create-project-link" class="block py-2 px-4 hover:bg-gray-700" onclick="openCreateProjectModal()">
                 <i class="fas fa-plus-circle mr-2"></i>
                 Create Project
               </a>
             </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#" id="capabilities-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openCapabilityModal()">
-            <i class="fas fa-tasks mr-2"></i>
-            Capabilities Management
-          </a>
+          </ul> -->
         </li>
         <li>
           <a href="#" id="milestone-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openMilestoneModal()">
             <i class="fas fa-calendar-check mr-2"></i>
-            Milestone Management
+            Milestone Planning
           </a>
         </li>
         <li>
           <a href="#" id="deliverable-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openDeliverableModal()">
             <i class="fas fa-clipboard-list mr-2"></i>
-            Deliverable Management
+            Deliverable Breakout
           </a>
         </li>
+        <li>
+          <a href="#" id="capabilities-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openCapabilityModal()">
+            <i class="fas fa-tasks mr-2"></i>
+            Testcase Design
+          </a>
+        </li>
+        
+        
         <li>
           <a href="#" id="test-execution-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
             <i class="fas fa-vial mr-2"></i>
@@ -115,6 +105,7 @@
           <a href="#" class="ml-3 text-gray-700 hover:text-gray-500">Profile</a>
         </div>
       </div>
+
 
       <!-- Dynamic Content Area -->
       <div id="main-content" class="p-4 flex-grow space-y-6">
@@ -252,26 +243,187 @@
         </div>
         <!-- Project Detail View (Hidden by Default) -->
         <div id="project-detail-view" class="space-y-4 hidden">
-          <h2 class="text-xl font-semibold mb-3">Project Details</h2>
+          <!-- <h2 class="text-xl font-semibold mb-3">Project Details</h2> -->
+            <!-- Horizontal Menu for QA Cycle Tabs -->
+            <div class="border-b border-gray-00 mb-4 ">
+              <nav class="qa-tab-menu flex space-x-4">
+                <a href="#" onclick="showQATab(event, 'project-overview')" class="active">Project Overview</a>
+                <a href="#" onclick="showQATab(event, 'milestone-planning')">Milestone Planning</a>
+                <a href="#" onclick="showQATab(event, 'deliverable-breakdown')">Deliverable Breakdown</a>
+                <a href="#" onclick="showQATab(event, 'test-execution')">Test Execution</a>
+                <a href="#" onclick="showQATab(event, 'reporting-review')">Reporting & Review</a>
+              </nav>
+            </div>
+
+            <!-- Dynamic Content Areas -->
+                <!-- Project Overview -->
+            <div id="project-overview" class="content-section active">
+              <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 id="project-name-detail" class="text-xl font-bold mb-2">Project Name</h3>
+                    <p id="project-description-detail" class="text-gray-700 mb-4">Project description goes here...</p>
+                
+                    <!-- Capabilities Section -->
+                    <h4 class="text-lg font-medium mb-2"><i class="fas fa-cogs mr-2"></i>Capabilities / Features</h4>
+                    <ul id="capability-list" class="space-y-2 ml-5 list-disc text-gray-700">
+                      <!-- Capabilities will be dynamically added here -->
+                    </ul>
+                
+                    <!-- Milestones Section -->
+                    <h4 class="text-lg font-medium mt-6 mb-2"><i class="fas fa-calendar-alt mr-2"></i>Milestones</h4>
+                    <ul id="milestone-list" class="space-y-4">
+                      <!-- Milestones will be dynamically added here -->
+                    </ul>
+              </div>
+            </div>
+            <!-- Milestone Planning -->
+        <div id="milestone-planning" class="content-section hidden">
           <div class="bg-white p-4 rounded-lg shadow-md">
-            <h3 id="project-name-detail" class="text-xl font-bold mb-2">Project Name</h3>
-            <p id="project-description-detail" class="text-gray-700 mb-4">Project description goes here...</p>
+            <h2 class="text-xl font-semibold">Milestone Planning</h2>
+            <p class="mb-4">Plan and organize milestones for project, ensuring key objectives are clearly defined and scheduled.</p>
 
-            <!-- Capabilities Section -->
-            <h4 class="text-lg font-medium mb-2"><i class="fas fa-cogs mr-2"></i>Capabilities / Features</h4>
-            <ul id="capability-list" class="space-y-2 ml-5 list-disc text-gray-700">
-              <!-- Capabilities will be dynamically added here -->
-            </ul>
+<!-- Milestone Cards (Kanban Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 1</h3>
+    <p class="text-sm text-gray-600">Objective: Initial Setup and Planning.</p>
+    <p class="text-sm text-gray-600">Deadline: 15/09/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 2</h3>
+    <p class="text-sm text-gray-600">Objective: Feature Implementation.</p>
+    <p class="text-sm text-gray-600">Deadline: 01/11/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 3</h3>
+    <p class="text-sm text-gray-600">Objective: Testing and Bug Fixes.</p>
+    <p class="text-sm text-gray-600">Deadline: 01/12/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <h3 class="text-lg font-semibold mb-2">Milestone 4</h3>
+    <p class="text-sm text-gray-600">Objective: Final Review and Deployment.</p>
+    <p class="text-sm text-gray-600">Deadline: 31/12/2024</p>
+    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+  </div>
+</div>
 
-            <!-- Milestones Section -->
-            <h4 class="text-lg font-medium mt-6 mb-2"><i class="fas fa-calendar-alt mr-2"></i>Milestones</h4>
-            <ul id="milestone-list" class="space-y-4">
-              <!-- Milestones will be dynamically added here -->
-            </ul>
+<!-- Milestone Detail View (Hidden by Default) -->
+<div id="milestone-detail-view" class="bg-white p-4 ">
+  <h3 class="text-2xl font-semibold mb-3">Milestone 1: Initial Setup and Planning</h3>
+  <p class="text-gray-600 mb-3">Detailed description and objectives of the milestone.</p>
+
+  <!-- Deliverables Table -->
+  <table class="min-w-full table-auto">
+    <thead>
+      <tr class="bg-gray-200 text-gray-600 text-left text-sm font-semibold">
+        <th class="py-3 px-4">Deliverable</th>
+        <th class="py-3 px-4">Description</th>
+        <th class="py-3 px-4">Status</th>
+        <th class="py-3 px-4">Deadline</th>
+      </tr>
+    </thead>
+    <tbody class="text-sm text-gray-600">
+      <tr class="border-b border-gray-300">
+        <td class="py-3 px-4">Requirement Analysis</td>
+        <td class="py-3 px-4">Analyze client requirements and draft initial documentation.</td>
+        <td class="py-3 px-4">Completed</td>
+        <td class="py-3 px-4">05/09/2024</td>
+      </tr>
+      <tr class="border-b border-gray-300">
+        <td class="py-3 px-4">Project Setup</td>
+        <td class="py-3 px-4">Setup project repositories, environments, and initial configurations.</td>
+        <td class="py-3 px-4">In Progress</td>
+        <td class="py-3 px-4">10/09/2024</td>
+      </tr>
+      <tr class="border-b border-gray-300">
+        <td class="py-3 px-4">Kickoff Meeting</td>
+        <td class="py-3 px-4">Organize kickoff meeting with stakeholders.</td>
+        <td class="py-3 px-4">Pending</td>
+        <td class="py-3 px-4">15/09/2024</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+            <!-- <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Current Milestone: User Onboarding</h3>
+                <p class="text-sm text-gray-600">Start Date: August 1, 2023 | End Date: September 15, 2023</p>
+                <p class="text-sm text-gray-600">Objectives: Complete registration flow, validate API integration.</p>
+                <div class="mt-4">
+                    <h4 class="font-semibold text-gray-700">Milestone Progress</h4>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%;"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">50% Complete</p>
+                </div>
+            </div> -->   
+        </div>
+      </div>
+
+        <!-- Deliverable Breakdown -->
+        
+        <div id="deliverable-breakdown" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Deliverable Breakdown</h2>
+            <p>Break down the User Onboarding milestone into specific deliverables that need to be developed and tested.</p>
+                <h3 class="font-semibold text-gray-700">Deliverables for User Onboarding</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li>API Endpoint Testing</li>
+                    <li>UI Form Validation</li>
+                    <li>Data Encryption & Security Checks</li>
+                </ul>
           </div>
+        </div>
+
+        <!-- Test Case Design -->
+        <div id="test-case-design" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Test Case Design</h2>
+            <p>Design test cases for each deliverable, ensuring they cover the critical scenarios.</p>
+            <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Test Cases for API Endpoint Testing</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li>Valid API requests and responses</li>
+                    <li>Error handling for invalid inputs</li>
+                    <li>Load testing under high traffic</li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <!-- Test Execution -->
+        <div id="test-execution" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Test Execution</h2>
+            <p>Track the execution of test cases and manage test runs for Project A.</p>
+            <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Current Test Execution</h3>
+                <p class="text-sm text-gray-600">API Endpoint Testing - In Progress</p>
+                <p class="text-sm text-gray-600">Total Test Cases: 10 | Passed: 6 | Failed: 2 | Blocked: 2</p>
+            </div>
+            </div>
+        </div>
+
+        <!-- Reporting & Review -->
+        <div id="reporting-review" class="content-section hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold">Reporting & Review</h2>
+            <p>Generate reports and review test results to identify areas of improvement.</p>
+            <div class="mt-4 bg-white p-4 rounded shadow">
+                <h3 class="font-semibold text-gray-700">Last Test Report</h3>
+                <p class="text-sm text-gray-600">Overall Test Coverage: 80%</p>
+                <p class="text-sm text-gray-600">Critical Bugs Found: 3</p>
+            </div>
+            </div>
+        </div>
+
         </div>
         <!-- Test Execution View (Hidden by Default) -->
         <div id="test-execution-view" class="space-y-4 hidden">
+          <div class="bg-white p-4 rounded-lg shadow-md">
           <h2 class="text-xl font-semibold mb-3">Test Execution</h2>
           <div class="bg-white p-4 rounded-lg shadow-md">
             <h3 class="text-lg font-medium">Test Planning & Preparation</h3>
@@ -280,6 +432,7 @@
             <p class="text-sm text-gray-600">Execute the tests and generate reports based on the results.</p>
           </div>
         </div>
+        </body>
       </div>
     </div>
   </div>
@@ -402,11 +555,11 @@
   </div>
 </div>
 
-  <!-- Toast Notification -->
+<!-- Toast Notification -->
 <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-lg shadow-lg hidden">
   <span id="toast-message">Project created successfully!</span>
 </div>
-  
+
   <!-- Script -->
   <script src="script.js"></script>
 </body>
