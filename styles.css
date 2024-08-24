@@ -1,0 +1,33 @@
+body {
+    font-family: 'Barlow', sans-serif;
+  }
+      /* Custom scrollbar styles */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .qa-tab-menu a {
+    padding: 10px 15px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #4b5563;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s;
+  }
+
+  .qa-tab-menu a:hover,
+  .qa-tab-menu a.active {
+    border-bottom: 4px solid #3b82f6;
+    color: #1f2937;
+  }
+
+  .qa-tab-content {
+    display: none;
+  }
+
+  .qa-tab-content.active {
+    display: block;
+  }
