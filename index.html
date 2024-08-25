@@ -248,6 +248,7 @@
             <div class="border-b border-gray-00 mb-4 ">
               <nav class="qa-tab-menu flex space-x-4">
                 <a href="#" onclick="showQATab(event, 'project-overview')" class="active">Project Overview</a>
+                <a href="#" onclick="showQATab(event, 'capabilities-map')" class="">Capabilities Map</a>
                 <a href="#" onclick="showQATab(event, 'milestone-planning')">Milestone Planning</a>
                 <a href="#" onclick="showQATab(event, 'deliverable-breakdown')">Deliverable Breakdown</a>
                 <a href="#" onclick="showQATab(event, 'test-execution')">Test Execution</a>
@@ -256,7 +257,7 @@
             </div>
 
             <!-- Dynamic Content Areas -->
-                <!-- Project Overview -->
+            <!-- Project Overview -->
             <div id="project-overview" class="content-section active">
               <div class="bg-white p-4 rounded-lg shadow-md">
                     <h3 id="project-name-detail" class="text-xl font-bold mb-2">Project Name</h3>
@@ -265,6 +266,7 @@
                     <!-- Capabilities Section -->
                     <h4 class="text-lg font-medium mb-2"><i class="fas fa-cogs mr-2"></i>Capabilities / Features</h4>
                     <ul id="capability-list" class="space-y-2 ml-5 list-disc text-gray-700">
+                      
                       <!-- Capabilities will be dynamically added here -->
                     </ul>
                 
@@ -275,43 +277,76 @@
                     </ul>
               </div>
             </div>
+            <!-- Capabilities Map -->
+            <div id="capabilities-map" class="content-section hidden">
+              <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold">Capabilities Map</h2>
+                <p class="text-gray-600">Visual representation of project capabilities aligned to specific features and deliverables, enabling efficie
+              </div>
+            </div>
             <!-- Milestone Planning -->
         <div id="milestone-planning" class="content-section hidden">
           <div class="bg-white p-4 rounded-lg shadow-md">
             <h2 class="text-xl font-semibold">Milestone Planning</h2>
             <p class="mb-4">Plan and organize milestones for project, ensuring key objectives are clearly defined and scheduled.</p>
 
+                <!-- Milestone Timeline -->
+              <div class="bg-white p-4 rounded-lg shadow-sm border mb-3">
+                <h2 class="text-lg font-semibold mb-3">Project Timeline</h2>
+                <div class="relative h-2 bg-gray-200 rounded-full">
+                  <div class="absolute top-0 left-0 h-full bg-yellow-500 rounded-full" style="width: 67%;"></div>
+                </div>
+                <div class="flex justify-between mt-4 text-sm text-gray-600">
+                  <span>Milestone 1</span>
+                  <span>Milestone 2</span>
+                  <span>Milestone 3</span>
+                  <span>Milestone 4</span>
+                </div>
+              </div>
+
 <!-- Milestone Cards (Kanban Style) -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-  <div class="bg-white p-4 rounded-lg shadow">
+  <div class="bg-white border p-4 rounded-lg">
     <h3 class="text-lg font-semibold mb-2">Milestone 1</h3>
     <p class="text-sm text-gray-600">Objective: Initial Setup and Planning.</p>
     <p class="text-sm text-gray-600">Deadline: 15/09/2024</p>
+    <div class="relative h-1 mt-1 bg-grey-100 rounded-full">
+      <div class="absolute top-0 left-0 h-full bg-green-600 rounded-full" style="width: 75%;"></div>
+    </div>
     <button class="mt-2 text-blue-600 hover:underline">View Details</button>
   </div>
-  <div class="bg-white p-4 rounded-lg shadow">
+  <div class=" border p-4 rounded-lg">
     <h3 class="text-lg font-semibold mb-2">Milestone 2</h3>
     <p class="text-sm text-gray-600">Objective: Feature Implementation.</p>
     <p class="text-sm text-gray-600">Deadline: 01/11/2024</p>
+    <div class="relative h-1 mt-1 bg-grey-200 rounded-full">
+      <div class="absolute top-0 left-0 h-full bg-yellow-500 rounded-full" style="width: 55%;"></div>
+    </div>
     <button class="mt-2 text-blue-600 hover:underline">View Details</button>
   </div>
-  <div class="bg-white p-4 rounded-lg shadow">
+  <div class="bg-white border p-4 rounded-lg">
     <h3 class="text-lg font-semibold mb-2">Milestone 3</h3>
     <p class="text-sm text-gray-600">Objective: Testing and Bug Fixes.</p>
     <p class="text-sm text-gray-600">Deadline: 01/12/2024</p>
+    <div class="relative h-1 mt-1 bg-white rounded-full">
+      <div class="absolute top-0 left-0 h-full bg-red-600 rounded-full" style="width: 15%;"></div>
+    </div>
     <button class="mt-2 text-blue-600 hover:underline">View Details</button>
   </div>
-  <div class="bg-white p-4 rounded-lg shadow">
+  <div class="bg-white border p-4 rounded-lg">
     <h3 class="text-lg font-semibold mb-2">Milestone 4</h3>
     <p class="text-sm text-gray-600">Objective: Final Review and Deployment.</p>
     <p class="text-sm text-gray-600">Deadline: 31/12/2024</p>
+    <div class="relative h-1 mt-1 bg-grey-200 rounded-full">
+      <div class="absolute top-0 left-0 h-full bg-red-600 rounded-full" style="width: 15%;"></div>
+    </div>
     <button class="mt-2 text-blue-600 hover:underline">View Details</button>
   </div>
 </div>
 
 <!-- Milestone Detail View (Hidden by Default) -->
 <div id="milestone-detail-view" class="bg-white p-4 ">
-  <h3 class="text-2xl font-semibold mb-3">Milestone 1: Initial Setup and Planning</h3>
+  <h3 class="text-lg font-semibold mb-3">Milestone 1: Initial Setup and Planning</h3>
   <p class="text-gray-600 mb-3">Detailed description and objectives of the milestone.</p>
 
   <!-- Deliverables Table -->
