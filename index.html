@@ -297,44 +297,68 @@
               </div>
 
 <!-- Milestone Cards (Kanban Style) -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-  <div class="bg-white border p-4 rounded-lg">
-    <h3 class="text-lg font-semibold mb-2">Milestone 1</h3>
-    <p class="text-sm text-gray-600">Objective: Initial Setup and Planning.</p>
-    <p class="text-sm text-gray-600">Deadline: 15/09/2024</p>
-    <div class="relative h-1 mt-1 bg-grey-100 rounded-full">
-      <div class="absolute top-0 left-0 h-full bg-green-600 rounded-full" style="width: 75%;"></div>
-    </div>
-    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
-  </div>
-  <div class=" border p-4 rounded-lg">
-    <h3 class="text-lg font-semibold mb-2">Milestone 2</h3>
-    <p class="text-sm text-gray-600">Objective: Feature Implementation.</p>
-    <p class="text-sm text-gray-600">Deadline: 01/11/2024</p>
-    <div class="relative h-1 mt-1 bg-grey-200 rounded-full">
-      <div class="absolute top-0 left-0 h-full bg-yellow-500 rounded-full" style="width: 55%;"></div>
-    </div>
-    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
-  </div>
-  <div class="bg-white border p-4 rounded-lg">
-    <h3 class="text-lg font-semibold mb-2">Milestone 3</h3>
-    <p class="text-sm text-gray-600">Objective: Testing and Bug Fixes.</p>
-    <p class="text-sm text-gray-600">Deadline: 01/12/2024</p>
-    <div class="relative h-1 mt-1 bg-white rounded-full">
-      <div class="absolute top-0 left-0 h-full bg-red-600 rounded-full" style="width: 15%;"></div>
-    </div>
-    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
-  </div>
-  <div class="bg-white border p-4 rounded-lg">
-    <h3 class="text-lg font-semibold mb-2">Milestone 4</h3>
-    <p class="text-sm text-gray-600">Objective: Final Review and Deployment.</p>
-    <p class="text-sm text-gray-600">Deadline: 31/12/2024</p>
-    <div class="relative h-1 mt-1 bg-grey-200 rounded-full">
-      <div class="absolute top-0 left-0 h-full bg-red-600 rounded-full" style="width: 15%;"></div>
-    </div>
-    <button class="mt-2 text-blue-600 hover:underline">View Details</button>
-  </div>
-</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white border border-grey-500 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold mb-2">Milestone 1</h3>
+              <p class="text-sm text-gray-600">Objective: Initial Setup and Planning.</p>
+              <p class="text-sm text-gray-600">Deadline: 15/09/2024</p>
+              <!-- Container untuk Progress Bar dan Persentase -->
+              <div class="flex items-center mt-1">
+                <!-- Progress Bar -->
+                <div class="relative h-1 flex-1 bg-gray-200 rounded-full">
+                  <div class="absolute top-0 left-0 h-full bg-green-600 rounded-full" style="width: 84%;"></div>
+                </div>
+                <!-- Teks Persentase -->
+                <span class="ml-2 text-sm text-gray-600">84%</span>
+              </div>
+              <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+            </div>
+            <div class=" border border-grey-500 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold mb-2">Milestone 2</h3>
+              <p class="text-sm text-gray-600">Objective: Feature Implementation.</p>
+              <p class="text-sm text-gray-600">Deadline: 01/11/2024</p>
+              <!-- Container untuk Progress Bar dan Persentase -->
+              <div class="flex items-center mt-1">
+                <!-- Progress Bar -->
+                <div class="relative h-1 flex-1 bg-gray-200 rounded-full">
+                  <div class="absolute top-0 left-0 h-full bg-yellow-600 rounded-full" style="width: 59%;"></div>
+                </div>
+                <!-- Teks Persentase -->
+                <span class="ml-2 text-sm text-gray-600">59%</span>
+              </div>
+              <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+            </div>
+            <div class="bg-white border border-grey-500 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold mb-2">Milestone 3</h3>
+              <p class="text-sm text-gray-600">Objective: Testing and Bug Fixes.</p>
+              <p class="text-sm text-gray-600">Deadline: 01/12/2024</p>
+              <!-- Container untuk Progress Bar dan Persentase -->
+              <div class="flex items-center mt-1">
+                <!-- Progress Bar -->
+                <div class="relative h-1 flex-1 bg-gray-200 rounded-full">
+                  <div class="absolute top-0 left-0 h-full bg-red-600 rounded-full" style="width: 37%;"></div>
+                </div>
+                <!-- Teks Persentase -->
+                <span class="ml-2 text-sm text-gray-600">37%</span>
+              </div>
+              <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+            </div>
+            <div class="bg-white border border-grey-700 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold mb-2">Milestone 4</h3>
+              <p class="text-sm text-gray-600">Objective: Final Review and Deployment.</p>
+              <p class="text-sm text-gray-600">Deadline: 31/12/2024</p>
+              <!-- Container untuk Progress Bar dan Persentase -->
+              <div class="flex items-center mt-1">
+                <!-- Progress Bar -->
+                <div class="relative h-1 flex-1 bg-gray-200 rounded-full">
+                  <div class="absolute top-0 left-0 h-full bg-red-600 rounded-full" style="width: 37%;"></div>
+                </div>
+                <!-- Teks Persentase -->
+                <span class="ml-2 text-sm text-gray-600">37%</span>
+              </div>
+              <button class="mt-2 text-blue-600 hover:underline">View Details</button>
+            </div>
+          </div>
 
 <!-- Milestone Detail View (Hidden by Default) -->
 <div id="milestone-detail-view" class="bg-white p-4 ">
