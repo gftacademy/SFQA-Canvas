@@ -475,56 +475,52 @@
 
         <!-- Capability Management View -->
         <div id="capability-management-view" class="space-y-4 mt-4 hidden">
-
             <div class="flex flex-wrap justify-between items-center mb-4">
-              <div>
-                <h1 class="text-xl font-bold">Capability List</h1>
-                <p class="text-sm text-gray-500">Manage your capabilities, features and deliverable efficiently</p>
-              </div>
-              <button class="text-blue-600 hover:underline" onclick="openCreateCapabilityModal()">
-                <i class="fas fa-list-ul text-sm"></i> Create Capability
-              </button>
+                <div>
+                    <h1 class="text-xl font-bold">Capability List</h1>
+                    <p class="text-sm text-gray-500">Manage your capabilities, features and deliverables efficiently</p>
+                </div>
+                <button class="text-blue-600 hover:underline" onclick="openCreateCapabilityModal()">
+                    <i class="fas fa-list-ul text-sm"></i> Create Capability
+                </button>
             </div>
-          
-  
+        
             <!-- Capability List Table -->
             <div class="bg-white p-2 overflow-x-auto border rounded mt-2">
-              <table class="min-w-full table-auto">
-              <thead>
-                <tr class="text-left text-sm font-semibold text-gray-600 border-b border-gray-300">
-                  <th class="py-3 px-4">Capability</th>
-                  <th class="py-3 px-4">Features</th>
-                  <th class="py-3 px-4">Deliverable</th>
-                  <th class="py-3 px-4">Description</th>
-                </tr>
-              </thead>
-              <tbody id="capability-list-tbody">
-                <!-- Capability rows will be dynamically added here -->
-              </tbody>
-            </table>
+                <table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="text-left text-sm font-semibold text-gray-600 border-b border-gray-300">
+                            <th class="py-3 px-4">Capability</th>
+                            <th class="py-3 px-4">Features</th>
+                            <th class="py-3 px-4">Deliverable</th>
+                            <th class="py-3 px-4">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="capability-list-tbody">
+                        <!-- Capability rows will be dynamically added here -->
+                    </tbody>
+                </table>
             </div>
-  
+        
             <!-- Pagination Controls -->
             <div class="flex justify-between items-center mt-4">
-            <div class="flex items-center space-x-2">
-              <label for="capabilitiesPerPage" class="text-sm text-gray-600">Capabilities per page:</label>
-              <select id="capabilitiesPerPage"
-                class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <option value="2">2</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-              </select>
-            </div>
-            <div class="flex justify-end items-center space-x-2 text-sm">
-              <button id="prevPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center" disabled>
-                <i class="fas fa-chevron-left mr-2"></i> Previous
-              </button>
-              <div id="pageInfo" class="text-sm text-gray-600">Page <span id="currentPage">1</span> of <span
-                  id="totalPages">1</span></div>
-              <button id="nextPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center">
-                Next <i class="fas fa-chevron-right ml-2"></i>
-              </button>
-            </div>
+                <div class="flex items-center space-x-2">
+                    <label for="capabilitiesPerPage" class="text-sm text-gray-600">Capabilities per page:</label>
+                    <select id="capabilitiesPerPage" class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        <option value="2">2</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="flex justify-end items-center space-x-2 text-sm">
+                    <button id="prevPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center" disabled>
+                        <i class="fas fa-chevron-left mr-2"></i> Previous
+                    </button>
+                    <div id="pageInfo" class="text-sm text-gray-600">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></div>
+                    <button id="nextPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center">
+                        Next <i class="fas fa-chevron-right ml-2"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
