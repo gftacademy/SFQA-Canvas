@@ -16,7 +16,7 @@
 
 <body class="bg-gray-50 text-gray-800">
   <!-- Wrapper Container -->
-  <div class="flex h-screen">
+<div class="flex h-screen">
 
     <!-- Left Sidebar -->
     <div class="w-60 bg-gray-900 text-white flex-shrink-0">
@@ -32,16 +32,18 @@
           </div>
         </div>
 
-  <!-- User Profile Section -->
-  <div class="p-4 flex items-center border-b border-gray-700">
-    <img src="https://api-portfolio.gft.academy/storage/images/fileAlbum_1724168123796.png" alt="User Pic" class="w-12 h-12 rounded-full mr-3">
-    <div>
-      <p class="text-lg font-medium">N. Santoso</p>
-      <p class="text-sm text-gray-400">Solution Architect</p>
-    </div>
-  </div>
-      <ul class="mt-4 space-y-2">
+        <!-- User Profile Section -->
+        <div class="p-4 flex items-center border-b border-gray-700">
+            <img src="https://api-portfolio.gft.academy/storage/images/fileAlbum_1724168123796.png" alt="User Pic" class="w-12 h-12 rounded-full mr-3">
+            <div>
+            <p class="text-lg font-medium">N. Santoso</p>
+            <p class="text-sm text-gray-400">Solution Architect</p>
+            </div>
+        </div>
+      
         <!-- Level 1 Items -->
+        <ul class="mt-4 space-y-2">
+        
         <!-- Dashboard Menu -->
         <li>
           <a href="#" id="dashboard-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
@@ -54,36 +56,25 @@
             <i class="fas fa-project-diagram mr-2"></i>
             <span>Project Management</span>
           </a>
-          <!-- Submenu for Create Project -->
-          <!-- <ul class="ml-8 mt-2 space-y-1">
-            <li>
-              <a href="#" id="create-project-link" class="block py-2 px-4 hover:bg-gray-700" onclick="openCreateProjectModal()">
-                <i class="fas fa-plus-circle mr-2"></i>
-                Create Project
-              </a>
-            </li>
-          </ul> -->
         </li>
         <li>
-          <a href="#" id="milestone-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openMilestoneModal()">
+          <a href="#" id="capability-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
             <i class="fas fa-calendar-check mr-2"></i>
-            Milestone Planning
+            Capability Management
           </a>
         </li>
         <li>
-          <a href="#" id="deliverable-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openDeliverableModal()">
+          <a href="#" id="deliverable-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
             <i class="fas fa-clipboard-list mr-2"></i>
             Deliverable Breakout
           </a>
         </li>
         <li>
-          <a href="#" id="capabilities-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700" onclick="openCapabilityModal()">
+          <a href="#" id="capabilities-management-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
             <i class="fas fa-tasks mr-2"></i>
             Testcase Design
           </a>
         </li>
-        
-        
         <li>
           <a href="#" id="test-execution-link" class="flex items-center py-2 px-4 hover:bg-gray-700">
             <i class="fas fa-vial mr-2"></i>
@@ -241,6 +232,7 @@
               </div>
           </div>
         </div>
+
         <!-- Project Detail View (Hidden by Default) -->
         <div id="project-detail-view" class="space-y-4 hidden">
           <!-- <h2 class="text-xl font-semibold mb-3">Project Details</h2> -->
@@ -456,74 +448,74 @@
         </div>
 
         </div>
+
+        <!-- Capability Management View -->
+        <div id="capability-management-view" class="space-y-4 mt-4 hidden">
+
+            <div class="flex flex-wrap justify-between items-center mb-4">
+              <div>
+                <h1 class="text-xl font-bold">Capability List</h1>
+                <p class="text-sm text-gray-500">Manage your capabilities, features and deliverable efficiently</p>
+              </div>
+              <button class="text-blue-600 hover:underline" onclick="">
+                <i class="fas fa-list-ul text-sm"></i> Create Capability
+              </button>
+            </div>
+          
+  
+            <!-- Capability List Table -->
+            <div class="bg-white p-2 overflow-x-auto border rounded mt-2">
+              <table class="min-w-full table-auto">
+              <thead>
+                <tr class="text-left text-sm font-semibold text-gray-600 border-b border-gray-300">
+                  <th class="py-3 px-4">Capability</th>
+                  <th class="py-3 px-4">Features</th>
+                  <th class="py-3 px-4">Deliverable</th>
+                  <th class="py-3 px-4">Description</th>
+                </tr>
+              </thead>
+              <tbody id="capability-list-tbody">
+                <!-- Capability rows will be dynamically added here -->
+              </tbody>
+            </table>
+            </div>
+  
+            <!-- Pagination Controls -->
+            <div class="flex justify-between items-center mt-4">
+            <div class="flex items-center space-x-2">
+              <label for="capabilitiesPerPage" class="text-sm text-gray-600">Capabilities per page:</label>
+              <select id="capabilitiesPerPage"
+                class="p-1.5 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+            <div class="flex justify-end items-center space-x-2 text-sm">
+              <button id="prevPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center" disabled>
+                <i class="fas fa-chevron-left mr-2"></i> Previous
+              </button>
+              <div id="pageInfo" class="text-sm text-gray-600">Page <span id="currentPage">1</span> of <span
+                  id="totalPages">1</span></div>
+              <button id="nextPage" class="px-2 py-2 text-gray-600 hover:bg-gray-200 rounded-lg items-center">
+                Next <i class="fas fa-chevron-right ml-2"></i>
+              </button>
+            </div>
+            </div>
+        </div>
+        
         <!-- Test Execution View (Hidden by Default) -->
         <div id="test-execution-view" class="space-y-4 hidden">
           <div class="bg-white p-4 rounded-lg shadow-md">
-          <h2 class="text-xl font-semibold mb-3">Test Execution</h2>
-          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-3">Test Execution</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md">
             <h3 class="text-lg font-medium">Test Planning & Preparation</h3>
             <p class="text-sm text-gray-600">Plan and prepare the test cases before execution.</p>
             <h3 class="text-lg font-medium mt-4">Test Execution</h3>
             <p class="text-sm text-gray-600">Execute the tests and generate reports based on the results.</p>
-          </div>
+            </div>
+            </div>
         </div>
-        </body>
-      </div>
-    </div>
-  </div>
-
-  <!-- Capabilities Management Modal -->
-  <div id="capabilities-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-lg font-semibold mb-4">Manage Capabilities</h2>
-      <form id="capability-form">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Capability Name</label>
-          <input type="text" id="capability-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeCapabilityModal()">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Milestone Management Modal -->
-  <div id="milestone-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-lg font-semibold mb-4">Manage Milestones</h2>
-      <form id="milestone-form">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Milestone Name</label>
-          <input type="text" id="milestone-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeMilestoneModal()">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Deliverable Management Modal -->
-  <div id="deliverable-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-lg font-semibold mb-4">Manage Deliverables</h2>
-      <form id="deliverable-form">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Deliverable Name</label>
-          <input type="text" id="deliverable-name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required>
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Technical Details</label>
-          <textarea id="deliverable-details" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4" required></textarea>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="closeDeliverableModal()">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
-        </div>
-      </form>
     </div>
   </div>
 
