@@ -433,58 +433,9 @@ function openEditProjectModal(id) {
 
 // load capability management
 function loadCapabilityList(){
-    const capabilities = [
-      {
-          id: 1,
-          name: "User Management",
-          description: "Manage user authentication, profiles, and access control.",
-          features: [
-              {
-                  id: 1,
-                  name: "User Registration",
-                  deliverables: [
-                      { id: 1, name: "Registration Form", description: "User sign-up with validation", status: "Completed" },
-                      { id: 2, name: "Email Verification", description: "verify after user registration", status: "In Progress" }
-                  ]
-              },
-              {
-                  id: 2,
-                  name: "User Login",
-                  deliverables: [
-                      { id: 3, name: "Login Screen", description: "UI sign in / sign up",status: "Completed" },
-                      { id: 4, name: "Password Reset", description: "if forget",status: "Pending" }
-                  ]
-              }
-          ]
-      },
-      {
-          id: 2,
-          name: "Product Catalog",
-          description: "Manage product listings, categories, and inventories.",
-          features: [
-              {
-                  id: 3,
-                  name: "Product Listing",
-                  deliverables: [
-                      { id: 5, name: "Product Database Setup", description: "setting multiple databases",status: "Completed" },
-                      { id: 6, name: "Product Filter", description: "search products by category, id, name",status: "In Progress" }
-                  ]
-              },
-              {
-                  id: 4,
-                  name: "Category Management",
-                  deliverables: [
-                      { id: 7, name: "Category Tree Structure", description: "UI tree",status: "Pending" },
-                      { id: 8, name: "Category Navigation", description: "short cut to partifcular product",status: "Pending" }
-                  ]
-              }
-          ]
-      }
-    ];
+    const capabilities = getCapabilities();
     
-    const tableBody = document.getElementById('capability-list-tbody');
-  
-      function renderTableByCap() {
+    function renderTableByCap() {
         const tableBody = document.getElementById('capability-list-tbody');
         tableBody.innerHTML = '';
     
@@ -499,7 +450,7 @@ function loadCapabilityList(){
                     if (firstRow && index === 0) {
                         deliverableRow.innerHTML += `
                             <td class="py-2 px-4 text-sm border-b feature-column" rowspan="${capability.features.reduce((acc, feature) => acc + feature.deliverables.length, 0)}">
-                                <i class="fas fa-cogs text-blue-500 icon-feature mr-2 "></i>
+                                <i class="fas fa-cogs text-blue-500 icon-feature mr-2"></i>
                                 <strong>${capability.name}</strong><br>
                                 <span class="text-gray-600 text-sm">${capability.description}</span>
                             </td>
@@ -513,7 +464,11 @@ function loadCapabilityList(){
                         </td>
                         <td class="py-2 px-4 text-sm border-b deliverable-column">
                             <i class="fas fa-check-circle text-yellow-500 icon-deliverable mr-2"></i>
-                            <span class="">${deliverable.name}</span>
+                            <span class="">${deliverable.name} </span>
+                            <div class="inline-flex space-x-2 mt-1">
+                                ${deliverable.backend ? '<span class="bg-blue-100 px-2 py-1 rounded-full text-xs">Backend</span>' : ''}
+                                ${deliverable.frontend ? '<span class="bg-green-100 px-2 py-1 rounded-full text-xs">Frontend</span>' : ''}
+                            </div>
                         </td>
                         <td class="py-2 px-4 text-sm border-b description-column">
                             ${deliverable.description}
@@ -526,11 +481,11 @@ function loadCapabilityList(){
         });
     }
   
-      // Initial rendering of the table
-      renderTableByCap();
-  }
+    // Initial rendering of the table
+    renderTableByCap();
+}
 
-  function openCreateCapabilityModal() {
+function openCreateCapabilityModal() {
     document.getElementById('create-capability-modal').classList.remove('hidden');
 }
 
@@ -642,9 +597,6 @@ document.getElementById('create-capability-form').addEventListener('submit', fun
     console.log('Deliverables:', deliverables);
     closeCreateCapabilityModal(); // Close modal after saving
 });
-   
-
-
 
 
 
