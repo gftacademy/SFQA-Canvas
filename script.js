@@ -245,7 +245,7 @@ document.getElementById('capability-management-link').addEventListener('click', 
     document.getElementById('capability-management-view').classList.remove('hidden');
     document.getElementById('dashboard-view').classList.add('hidden');
     document.getElementById('project-list-view').classList.add('hidden');
-    // document.getElementById('project-detail-view').classList.add('hidden');
+    document.getElementById('project-detail-view').classList.add('hidden');
     document.getElementById('test-execution-view').classList.add('hidden');
     loadCapabilityList();
 });
