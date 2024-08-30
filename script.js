@@ -530,6 +530,119 @@ function loadCapabilityList(){
       renderTableByCap();
   }
 
+  function openCreateCapabilityModal() {
+    document.getElementById('create-capability-modal').classList.remove('hidden');
+}
+
+function closeCreateCapabilityModal() {
+    document.getElementById('create-capability-modal').classList.add('hidden');
+    features = [];
+    deliverables = [];
+    renderFeatures();
+    renderDeliverables();
+}
+
+
+let features = [];
+let deliverables = [];
+
+function addFeature() {
+    const featureId = document.getElementById('new-feature-id').value.trim();
+    const featureName = document.getElementById('new-feature').value.trim();
+    if (featureId !== '' && featureName !== '') {
+        features.push({ id: featureId, name: featureName });
+        document.getElementById('new-feature-id').value = '';
+        document.getElementById('new-feature').value = '';
+        renderFeatures();
+        populateFeatureDropdown(); // Update dropdown options when a new feature is added
+    }
+}
+
+function removeFeature(index) {
+    features.splice(index, 1);
+    renderFeatures();
+    populateFeatureDropdown(); // Update dropdown when a feature is removed
+}
+
+function addDeliverable() {
+    const deliverableId = document.getElementById('new-deliverable-id').value.trim();
+    const deliverableName = document.getElementById('new-deliverable').value.trim();
+    const deliverableDescription = document.getElementById('new-deliverable-description').value.trim();
+    const relatedFeatureId = document.getElementById('deliverable-feature').value;
+    const isBackEnd = document.getElementById('backend-checkbox').checked;
+    const isFrontEnd = document.getElementById('frontend-checkbox').checked;
+
+    if (deliverableId !== '' && deliverableName !== '') {
+        deliverables.push({
+            id: deliverableId,
+            name: deliverableName,
+            description: deliverableDescription,
+            featureId: relatedFeatureId,
+            backend: isBackEnd,
+            frontend: isFrontEnd
+        });
+        document.getElementById('new-deliverable-id').value = '';
+        document.getElementById('new-deliverable').value = '';
+        document.getElementById('new-deliverable-description').value = '';
+        renderDeliverables();
+    }
+}
+
+function removeDeliverable(index) {
+    deliverables.splice(index, 1);
+    renderDeliverables();
+}
+
+function renderFeatures() {
+    const featuresList = document.getElementById('features-list');
+    featuresList.innerHTML = features.map((feature, index) => `
+        <li>
+            <strong>ID:</strong> ${feature.id} - ${feature.name}
+            <button type="button" class="text-red-500 ml-2" onclick="removeFeature(${index})">Remove</button>
+        </li>`).join('');
+}
+
+function renderDeliverables() {
+    const deliverablesList = document.getElementById('deliverables-list');
+    deliverablesList.innerHTML = deliverables.map((deliverable, index) => {
+        const relatedFeature = features.find(feature => feature.id === deliverable.featureId);
+        return `
+            <li>
+                <strong>ID:</strong> ${deliverable.id} - ${deliverable.name}
+                <p class="text-sm text-gray-600">${deliverable.description}</p>
+                <p class="text-sm text-gray-500"><em>Feature:</em> ${relatedFeature ? relatedFeature.name : 'N/A'}</p>
+                <p class="text-sm text-gray-500"><em>Type:</em> ${deliverable.backend ? 'Back End' : ''}${deliverable.backend && deliverable.frontend ? ', ' : ''}${deliverable.frontend ? 'Front End' : ''}</p>
+                <button type="button" class="text-red-500 ml-2" onclick="removeDeliverable(${index})">Remove</button>
+            </li>`;
+    }).join('');
+}
+
+function populateFeatureDropdown() {
+    const featureDropdown = document.getElementById('deliverable-feature');
+    featureDropdown.innerHTML = features.map(feature => `<option value="${feature.id}">${feature.name}</option>`).join('');
+}
+
+function closeCreateCapabilityModal() {
+    document.getElementById('create-capability-modal').classList.add('hidden');
+    features = [];
+    deliverables = [];
+    renderFeatures();
+    renderDeliverables();
+    populateFeatureDropdown();
+}
+
+// Handle form submission
+document.getElementById('create-capability-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // Handle saving the capability, features, and deliverables
+    console.log('Capability ID:', document.getElementById('capability-id').value);
+    console.log('Capability Name:', document.getElementById('capability-name').value);
+    console.log('Description:', document.getElementById('capability-description').value);
+    console.log('Features:', features);
+    console.log('Deliverables:', deliverables);
+    closeCreateCapabilityModal(); // Close modal after saving
+});
+   
 
 
 
