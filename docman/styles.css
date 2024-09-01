@@ -61,6 +61,26 @@ body {
     text-decoration: underline;
 }
 
+/* Styling untuk ordered list (numbered list) */
+.document-content ol {
+    list-style-type: decimal;
+}
+
+.document-content ol li {
+    margin-bottom: 0.5rem;
+    color: #374151; /* Tailwind's gray-700 */
+}
+
+/* Styling untuk unordered list (bullet list) */
+.document-content ul {
+    list-style-type: disc;
+}
+
+.document-content ul li {
+    margin-bottom: 0.5rem;
+    color: #374151; /* Tailwind's gray-700 */
+}
+
 /* Styling untuk TOC tree */
 #toc {
     list-style: none;
