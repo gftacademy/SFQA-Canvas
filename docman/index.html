@@ -181,146 +181,172 @@
 
     <!-- EasyMDE Script -->
     <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script src="docman.js"></script>
     <script>
-        let docs = {
+        // Initialize docs object
+let docs = {};
+
+// Function to initialize docs from Local Storage
+function initializeDocsStorage() {
+    const storedDocs = localStorage.getItem('docs');
+    if (storedDocs) {
+        docs = JSON.parse(storedDocs);
+    } else {
+        // Initialize with default data if nothing is in Local Storage
+        docs = {
             "doc1.md": { title: "Student Portfolio.md", content: "# Introduction\n\n## Section 1.1\n\nContent of section 1.1.\n\n## Section 1.2\n\nContent of section 1.2.![](https://api-portfolio.gft.academy/storage/images/fileAlbum_1723689487589.jpg)" },
             "doc2.md": { title: "Java Fundamental.md", content: "# Software Overview\n\n## Introduction\n\nIntroduction content.\n\n## Details\n\nDetails content." }
         };
-
-        const sidebar = document.getElementById('sidebar');
-        const contentSection = document.getElementById('contentSection');
-        const contentDisplay = document.getElementById('contentDisplay');
-        const editorSection = document.getElementById('editorSection');
-        const tocSidebar = document.getElementById('tocSidebar');
-        const toc = document.getElementById('toc');
-        const docTitle = document.getElementById('docTitle');
-        const docTitleInput = document.getElementById('docTitleInput');
-
-        // Initialize EasyMDE Editor
-        const easyMDE = new EasyMDE({ element: document.getElementById("markdownEditor") });
-
-        // Initialize Showdown converter
-        const converter = new showdown.Converter();
-
-        function loadSidebar() {
-            sidebar.innerHTML = "";
-            for (const doc in docs) {
-                const docItem = document.createElement('div');
-                docItem.className = "document-item";
-
-                const link = document.createElement('a');
-                link.href = "#";
-                link.textContent = docs[doc].title;
-                link.className = "text-blue-600 hover:underline flex items-center";
-                link.onclick = () => {
-                    displayContent(doc);
-                    return false;
-                };
-
-                const docIcon = document.createElement('i');
-                docIcon.className = "fas fa-file-alt document-icon"; // Icon for each document
-
-                const controls = document.createElement('div');
-
-                const editBtn = document.createElement('button');
-                editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-                editBtn.className = "text-sm text-yellow-600 hover:underline mx-2";
-                editBtn.onclick = () => {
-editDocument(doc);
-return false;
-};            const deleteBtn = document.createElement('button');
-            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteBtn.className = "text-sm text-red-600 hover:underline";
-            deleteBtn.onclick = () => {
-                deleteDocument(doc);
-                return false;
-            };
-
-            controls.appendChild(editBtn);
-            controls.appendChild(deleteBtn);
-
-            docItem.appendChild(docIcon);
-            docItem.appendChild(link);
-            docItem.appendChild(controls);
-
-            sidebar.appendChild(docItem);
-        }
+        localStorage.setItem('docs', JSON.stringify(docs));
     }
+}
 
-    function generateTOC() {
-        toc.innerHTML = "";
-        const headings = contentDisplay.querySelectorAll("h1, h2, h3");
-        headings.forEach(heading => {
-            const link = document.createElement('a');
-            link.href = `#${heading.id}`;
-            link.textContent = heading.textContent;
-            link.className = "block text-gray-600 hover:text-blue-600 ml-" + (parseInt(heading.tagName.charAt(1)) * 2);
-            
-            const listItem = document.createElement('li');
-            listItem.appendChild(link);
-            toc.appendChild(listItem);
-        });
-    }
+// Function to save docs to Local Storage
+function saveDocsToStorage() {
+    localStorage.setItem('docs', JSON.stringify(docs));
+}
 
-    function displayContent(doc) {
-        contentSection.style.display = "block";
-        editorSection.style.display = "none";
-        docTitle.textContent = docs[doc].title;
-        const htmlContent = converter.makeHtml(docs[doc].content);
-        contentDisplay.innerHTML = htmlContent;
+const sidebar = document.getElementById('sidebar');
+const contentSection = document.getElementById('contentSection');
+const contentDisplay = document.getElementById('contentDisplay');
+const editorSection = document.getElementById('editorSection');
+const tocSidebar = document.getElementById('tocSidebar');
+const toc = document.getElementById('toc');
+const docTitle = document.getElementById('docTitle');
+const docTitleInput = document.getElementById('docTitleInput');
 
-        // Add IDs to headings for TOC linking
-        const headings = contentDisplay.querySelectorAll("h1, h2, h3");
-        headings.forEach(heading => {
-            heading.id = heading.textContent.toLowerCase().replace(/\s+/g, '-');
-        });
+// Initialize EasyMDE Editor
+const easyMDE = new EasyMDE({ element: document.getElementById("markdownEditor") });
 
-        generateTOC(); // Generate TOC after content is rendered
-    }
+// Initialize Showdown converter
+const converter = new showdown.Converter();
 
-    function editDocument(doc) {
-        contentSection.style.display = "none";
-        editorSection.style.display = "block";
-        docTitleInput.value = docs[doc].title; // Set the document title in the input field
-        easyMDE.value(docs[doc].content); // Set the content in EasyMDE Editor
+function loadSidebar() {
+    sidebar.innerHTML = "";
+    for (const doc in docs) {
+        const docItem = document.createElement('div');
+        docItem.className = "document-item";
 
-        document.getElementById('saveDocBtn').onclick = () => {
-            const newTitle = docTitleInput.value.trim();
-            if (!newTitle) {
-                alert("Title cannot be empty.");
-                return;
-            }
-
-            docs[doc].title = newTitle;
-            docs[doc].content = easyMDE.value();
-
-            loadSidebar();
+        const link = document.createElement('a');
+        link.href = "#";
+        link.textContent = docs[doc].title;
+        link.className = "text-blue-600 hover:underline flex items-center";
+        link.onclick = () => {
             displayContent(doc);
+            return false;
         };
-    }
 
-    function deleteDocument(doc) {
-        if (confirm(`Are you sure you want to delete "${docs[doc].title}"?`)) {
-            delete docs[doc];
-            loadSidebar();
-            contentSection.style.display = "none";
-            editorSection.style.display = "none";
-        }
-    }
+        const docIcon = document.createElement('i');
+        docIcon.className = "fas fa-file-alt document-icon"; // Icon for each document
 
-    document.getElementById('addDocBtn').onclick = () => {
-        const docName = prompt("Enter document name (e.g., doc3.md):");
-        if (docName) {
-            docs[docName] = {
-                title: "New Document",
-                content: "# New Document\n\nStart editing..."
-            };
-            loadSidebar();
-            editDocument(docName);
+        const controls = document.createElement('div');
+
+        const editBtn = document.createElement('button');
+        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+        editBtn.className = "text-sm text-yellow-600 hover:underline mx-2";
+        editBtn.onclick = () => {
+            editDocument(doc);
+            return false;
+        };
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        deleteBtn.className = "text-sm text-red-600 hover:underline";
+        deleteBtn.onclick = () => {
+            deleteDocument(doc);
+            return false;
+        };
+
+        controls.appendChild(editBtn);
+        controls.appendChild(deleteBtn);
+
+        docItem.appendChild(docIcon);
+        docItem.appendChild(link);
+        docItem.appendChild(controls);
+
+        sidebar.appendChild(docItem);
+    }
+}
+
+function generateTOC() {
+    toc.innerHTML = "";
+    const headings = contentDisplay.querySelectorAll("h1, h2, h3");
+    headings.forEach(heading => {
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.className = "block text-gray-600 hover:text-blue-600 ml-" + (parseInt(heading.tagName.charAt(1)) * 2);
+        
+        const listItem = document.createElement('li');
+        listItem.appendChild(link);
+        toc.appendChild(listItem);
+    });
+}
+
+function displayContent(doc) {
+    contentSection.style.display = "block";
+    editorSection.style.display = "none";
+    docTitle.textContent = docs[doc].title;
+    const htmlContent = converter.makeHtml(docs[doc].content);
+    contentDisplay.innerHTML = htmlContent;
+
+    // Add IDs to headings for TOC linking
+    const headings = contentDisplay.querySelectorAll("h1, h2, h3");
+    headings.forEach(heading => {
+        heading.id = heading.textContent.toLowerCase().replace(/\s+/g, '-');
+    });
+
+    generateTOC(); // Generate TOC after content is rendered
+}
+
+function editDocument(doc) {
+    contentSection.style.display = "none";
+    editorSection.style.display = "block";
+    docTitleInput.value = docs[doc].title; // Set the document title in the input field
+    easyMDE.value(docs[doc].content); // Set the content in EasyMDE Editor
+
+    document.getElementById('saveDocBtn').onclick = () => {
+        const newTitle = docTitleInput.value.trim();
+        if (!newTitle) {
+            alert("Title cannot be empty.");
+            return;
         }
+
+        docs[doc].title = newTitle;
+        docs[doc].content = easyMDE.value();
+
+        saveDocsToStorage(); // Save updated docs to Local Storage
+        loadSidebar();
+        displayContent(doc);
     };
+}
 
-    loadSidebar();
+function deleteDocument(doc) {
+    if (confirm(`Are you sure you want to delete "${docs[doc].title}"?`)) {
+        delete docs[doc];
+        saveDocsToStorage(); // Save updated docs to Local Storage after deletion
+        loadSidebar();
+        contentSection.style.display = "none";
+        editorSection.style.display = "none";
+    }
+}
+
+document.getElementById('addDocBtn').onclick = () => {
+    const docName = prompt("Enter document name (e.g., doc3.md):");
+    if (docName) {
+        docs[docName] = {
+            title: "New Document",
+            content: "# New Document\n\nStart editing..."
+        };
+        saveDocsToStorage(); // Save updated docs to Local Storage after addition
+        loadSidebar();
+        editDocument(docName);
+    }
+};
+
+// Initialize data from Local Storage and load sidebar
+initializeDocsStorage();
+loadSidebar();
 </script>
 </body>
 </html>
