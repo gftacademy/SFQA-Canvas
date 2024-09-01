@@ -161,3 +161,15 @@ body {
     vertical-align: -0.4rem;
     color: #2563eb; /* Tailwind's blue-600 */
 }
+
+/* Styling untuk Author di dalam Blockquote */
+.document-content blockquote footer {
+    margin-top: 0.75rem;
+    font-size: 0.875rem; /* Ukuran font lebih kecil untuk author */
+    color: #6b7280; /* Tailwind's gray-500 */
+    text-align: right; /* Penempatan author di sebelah kanan */
+}
+
+.document-content blockquote footer::before {
+    content: "— "; /* Menambahkan tanda sebelum nama author */
+}
